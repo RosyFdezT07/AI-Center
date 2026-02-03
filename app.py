@@ -661,31 +661,12 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    # Footer del sidebar
-    st.sidebar.markdown("""
-    <div style="margin-top: 40px; padding: 20px 0; border-top: 1px solid rgba(0, 212, 255, 0.1);">
-        <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
-            <div style="width: 8px; height: 8px; background: #00D4FF; border-radius: 50%; margin: 0 5px; animation: pulse 2s infinite;"></div>
-            <div style="width: 8px; height: 8px; background: #00D4FF; border-radius: 50%; margin: 0 5px; animation: pulse 2s infinite 0.3s;"></div>
-            <div style="width: 8px; height: 8px; background: #00D4FF; border-radius: 50%; margin: 0 5px; animation: pulse 2s infinite 0.6s;"></div>
-        </div>
-        
-        <div style="text-align: center; color: #6B7280; font-size: 11px; line-height: 1.6;">
-            <p style="margin: 0; color: #80D8FF;">Centro de Investigación en IA</p>
-            <p style="margin: 5px 0; color: #6B7280;">v2.0 • Sistema Inteligente</p>
-            <p style="margin: 15px 0 0 0; color: #4A5568; font-size: 10px;">
-                © 2025 • Todos los derechos reservados
-            </p>
-        </div>
-    </div>
-    
-    <style>
-    @keyframes pulse {
-        0%, 100% { opacity: 0.3; transform: scale(1); }
-        50% { opacity: 1; transform: scale(1.2); }
-    }
-    </style>
-    """, unsafe_allow_html=True)
+    # Footer del sidebar 
+    st.sidebar.divider() # Crea una línea horizontal limpia
+
+    st.sidebar.caption("Centro de Investigación en IA")
+    st.sidebar.caption("v2.0 • Sistema Inteligente")
+    st.sidebar.caption("© 2025 • Todos los derechos reservados")
     
    
     # CONTENIDO PRINCIPAL SEGÚN PÁGINA
