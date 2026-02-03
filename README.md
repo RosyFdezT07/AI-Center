@@ -306,7 +306,7 @@ IA_Center/
 └── .gitignore
 └──  __init__.py
 
-*📚 Explicación de Módulos Clave*
+*📚Explicación de Módulos Clave*
 dominio/restricciones.py - Cerebro del Sistema
 
 Implementa 3 tipos de restricciones:
