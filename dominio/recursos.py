@@ -6,17 +6,22 @@ import uuid
 @dataclass
 class Recurso:
     """Clase que representa un recurso en el centro de investigación?"""
-    id: str
-    nombre: str
-    tipo: str #computacional, humano, espacio, equipo
+    id: str = ""
+    nombre: str = ""
+    tipo: str = "" #computacional, humano, espacio, equipo
     capacidad: int = 1 #Para recursos que posean múltiples unidades
     atributos: Dict[str, Any] = field(default_factory=dict)
-    disponible: bool = True
-
+    
     def __post_init__(self):#función que es un método de instancia, opera sobre instancias
         """Validaciones después de la inicialización"""
         if not self.id:
             self.id = f"recurso_{uuid.uuid4().hex[:8]}"
+        
+        if not self.nombre:        # Validar que nombre no esté vacío
+            raise ValueError("El nombre del recurso es obligatorio")
+        
+        if not self.tipo:          # Validar que tipo no esté vacío
+            raise ValueError("El tipo del recurso es obligatorio")
         
         if self.capacidad < 1:
             raise ValueError("La capacidad debe de ser al menos uno")
@@ -26,22 +31,20 @@ class Recurso:
         """Crea una instancia de Recurso desde diccionario"""
         return cls( 
             id=data.get('id', ''),
-            nombre=data['nombre'],
-            tipo=data['tipo'],
+            nombre=data.get('nombre', ''),
+            tipo=data.get('tipo', ''),
             capacidad=data.get('capacidad', 1),
             atributos=data.get('atributos', {}),
-            disponible=data.get('disponible', True)
         )
     def to_dict(self) ->Dict[str, Any]:
         """Convierte el recurso a diccionario para serialización"""
-        #Serialización :Guardar los objetos para ser utlizados después
+        #Serialización :Guardar los objetos para ser utilizados después
         return {
             'id': self.id,
             'nombre': self.nombre,
             'tipo': self.tipo,
             'capacidad': self.capacidad,
             'atributos': self.atributos,
-            'disponible': self.disponible
         } 
     
     def es_compatible_con(self, other: 'Recurso') ->bool:
@@ -57,19 +60,18 @@ class Recurso:
     
     def __eq__(self, other) ->bool:
         """Compara recursos por ID"""
-        if not isinstance(other, Resource):
+        if not isinstance(other, Recurso):
             return False
         return self.id == other.id
     
     def __str__(self):
         """Representación legible del Recurso"""
         capacidad_str = f" (x{self.capacidad})" if self.capacidad > 1 else ""  
-        estado = "✅" if self.disponible else "❌" 
-        return f"{estado} {self.nombre}{capacidad_str} [{self.tipo}]"  
+        return f"{self.nombre}{capacidad_str} [{self.tipo}]"  
     
     def __repr__(self):
         """Se utiliza para debugging"""
-        return f"Recurso(id='{self.id}', nombre='{self.nombre}', tipo='{self.tipo})'"
+        return f"Recurso(id='{self.id}', nombre='{self.nombre}', tipo='{self.tipo}')"
 
 class GestorRecursos:
     """Clase para gestionar diversos recursos"""
@@ -90,10 +92,6 @@ class GestorRecursos:
     def obtener_por_tipo(self, tipo:str) ->List[Recurso]:
         """Devuelve una lista con los recursos del mismo tipo"""
         return[ r for r in self.recursos.values() if r.tipo == tipo]
-    
-    def obtener_disponibles(self) ->List[Recurso]:
-        """Obtiene los recursos que se encuentran disponibles"""
-        return [r for r in self.recursos.values() if r.disponibilidad]
     
     def buscar_por_nombre(self, nombre:str) ->List[Recurso]:
         """Obtiene los recursos por nombre(Búsqueda parcial)"""
@@ -125,12 +123,12 @@ class GestorRecursos:
         """Permite iterar sobre los recursos"""
         return iter(self.recursos.values())
     
-    #Recursos predefinidos para el centro de IA
-    def crear_recursos_predeterminados() -> GestorRecursos:
+#Recursos predefinidos para el centro de IA
+def crear_recursos_predeterminados() -> GestorRecursos:
     """Crea los recursos predeterminados de un centro de investigación de IA"""
-        gestor = GestorRecursos()    
+    gestor = GestorRecursos()    
     
-   recursos_base = [
+    recursos_base = [
         # Recursos computacionales
         Recurso("cluster_gpu_a100", "Cluster GPU A100 (8x NVIDIA A100)", "computacional", 1, {
             "memoria_gpu": "320GB",
@@ -159,6 +157,22 @@ class GestorRecursos:
             "gpu": "NVIDIA RTX 4090",
             "ram": "64GB",
             "almacenamiento": "4TB NVMe"
+        }),
+        
+        Recurso("servidor_externo", "Servidor Cloud Externo (AWS/GCP)", "computacional", 2, {
+            "proveedor": "AWS EC2 P4d",
+            "gpu": "8x NVIDIA A100",
+            "ram": "1152GB",
+            "ubicacion": "us-east-1",
+            "acceso": "VPN exclusiva"
+        }),
+
+        Recurso("robot_aprendizaje", "Robot de Aprendizaje por Refuerzo", "equipo", 1, {
+            "tipo": "Manipulador 6DOF",
+            "sensores": ["RGB-D", "LiDAR", "Táctiles"],
+            "controlador": "NVIDIA Jetson AGX",
+            "software": "ROS2, PyTorch",
+            "area_requerida": "16m²"
         }),
         
         # Recursos humanos
@@ -214,15 +228,7 @@ class GestorRecursos:
         gestor.agregar_recurso(recurso)
 
     return gestor
-    
-
-
-
-
-
-
-
-    ]
+           
 
 
     

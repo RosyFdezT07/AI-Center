@@ -1,0 +1,355 @@
+{
+  "metadata": {
+    "fecha_guardado": "2024-04-10T10:30:00",
+    "version": "1.0",
+    "total_recursos": 12,
+    "total_eventos": 3,
+    "dominio": "Centro de Investigación en Inteligencia Artificial",
+    "descripcion": "Ejemplo de datos para el planificador de eventos"
+  },
+  
+  "recursos": [
+    {
+      "id": "cluster_gpu_a100",
+      "nombre": "Cluster GPU A100 (8x NVIDIA A100, 320GB)",
+      "tipo": "computacional",
+      "capacidad": 1,
+      "atributos": {
+        "fabricante": "NVIDIA",
+        "modelo": "DGX A100",
+        "memoria_gpu": "320 GB HBM2e",
+        "procesadores": "2x AMD EPYC 7742",
+        "nucleos_cpu": 128,
+        "ram": "1 TB DDR4",
+        "almacenamiento": "15 TB NVMe SSD",
+        "consumo_energia": "6.5 kW",
+        "software": "CUDA 12.1, PyTorch 2.0, TensorFlow 2.13"
+      },
+      "disponible": true
+    },
+    {
+      "id": "cluster_gpu_v100",
+      "nombre": "Cluster GPU V100 (4x NVIDIA V100, 128GB)",
+      "tipo": "computacional",
+      "capacidad": 1,
+      "atributos": {
+        "fabricante": "NVIDIA",
+        "modelo": "DGX Station",
+        "memoria_gpu": "128 GB",
+        "procesadores": "2x Intel Xeon Gold 6248",
+        "nucleos_cpu": 80,
+        "ram": "512 GB",
+        "almacenamiento": "10 TB SSD",
+        "consumo_energia": "3.2 kW"
+      },
+      "disponible": true
+    },
+    {
+      "id": "servidor_cpu",
+      "nombre": "Servidor CPU High-Memory (AMD EPYC 96 núcleos)",
+      "tipo": "computacional",
+      "capacidad": 2,
+      "atributos": {
+        "procesadores": "2x AMD EPYC 9654",
+        "nucleos": 192,
+        "ram": "2 TB DDR5",
+        "almacenamiento": "200 TB NVMe + HDD"
+      },
+      "disponible": true
+    },
+    {
+      "id": "estacion_trabajo",
+      "nombre": "Estación de Trabajo RTX 4090",
+      "tipo": "computacional",
+      "capacidad": 4,
+      "atributos": {
+        "gpu": "NVIDIA RTX 4090",
+        "ram": "64GB",
+        "almacenamiento": "4TB NVMe"
+      },
+      "disponible": true
+    },
+    {
+      "id": "investigador_vision",
+      "nombre": "Dr. Elena Rodríguez - Investigador Senior Visión Computacional",
+      "tipo": "humano",
+      "capacidad": 1,
+      "atributos": {
+        "especialidad": "Computer Vision & Deep Learning",
+        "experiencia": "8 años",
+        "titulacion": "PhD Computer Science - Stanford",
+        "certificaciones": ["NVIDIA DLI", "TensorFlow Developer", "PyTorch Certified"],
+        "habilidades": ["CNN", "Transformers", "GANs", "Object Detection"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "investigador_nlp",
+      "nombre": "Dr. Carlos Méndez - Investigador Senior NLP",
+      "tipo": "humano",
+      "capacidad": 1,
+      "atributos": {
+        "especialidad": "NLP & Large Language Models",
+        "experiencia": "6 años",
+        "titulacion": "PhD Linguistics & CS - MIT",
+        "certificaciones": ["HuggingFace", "OpenAI API", "spaCy Expert"],
+        "habilidades": ["Transformers", "BERT", "GPT", "Fine-tuning"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "ingeniero_mlops",
+      "nombre": "Ingeniero de MLOps",
+      "tipo": "humano",
+      "capacidad": 2,
+      "atributos": {
+        "especialidad": "MLOps & DevOps",
+        "experiencia": "3+ años",
+        "certificaciones": ["Docker", "Kubernetes", "AWS", "MLflow"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "cientifico_datos",
+      "nombre": "Científico de Datos",
+      "tipo": "humano",
+      "capacidad": 3,
+      "atributos": {
+        "especialidad": "Data Science",
+        "experiencia": "2+ años",
+        "certificaciones": ["Python", "Pandas", "Scikit-learn"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "lab_datos_sensibles",
+      "nombre": "Laboratorio de Datos Sensibles (Nivel 3 Seguridad)",
+      "tipo": "espacio",
+      "capacidad": 1,
+      "atributos": {
+        "capacidad_personas": 4,
+        "nivel_seguridad": 3,
+        "acceso": "Tarjeta + Biometría + PIN",
+        "equipamiento": ["Estaciones cifradas", "Almacenamiento encriptado"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "sala_servidores",
+      "nombre": "Sala de Servidores Principal - Tier 3",
+      "tipo": "espacio",
+      "capacidad": 1,
+      "atributos": {
+        "capacidad_personas": 2,
+        "temperatura_controlada": true,
+        "ups": "Doble conversión - 2 horas",
+        "generador": "Diesel - 72 horas"
+      },
+      "disponible": true
+    },
+    {
+      "id": "sala_reuniones",
+      "nombre": "Sala de Reuniones Principal",
+      "tipo": "espacio",
+      "capacidad": 1,
+      "atributos": {
+        "capacidad_personas": 12,
+        "equipamiento": ["Proyector 4K", "Sistema de video conferencia"]
+      },
+      "disponible": true
+    },
+    {
+      "id": "lab_prototipado",
+      "nombre": "Laboratorio de Prototipado",
+      "tipo": "espacio",
+      "capacidad": 1,
+      "atributos": {
+        "capacidad_personas": 6,
+        "equipamiento": ["Impresoras 3D", "Sensores IoT", "Kits de desarrollo"]
+      },
+      "disponible": true
+    }
+  ],
+  
+  "eventos": [
+    {
+      "id": "evento_entrenamiento_cancer",
+      "nombre": "Entrenamiento Modelo Alpha - Detección Temprana Cáncer de Piel",
+      "inicio": "2024-04-15T09:00:00",
+      "fin": "2024-04-15T13:00:00",
+      "recursos": [
+        {
+          "id": "cluster_gpu_a100",
+          "nombre": "Cluster GPU A100 (8x NVIDIA A100, 320GB)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "fabricante": "NVIDIA",
+            "modelo": "DGX A100",
+            "memoria_gpu": "320 GB HBM2e",
+            "procesadores": "2x AMD EPYC 7742",
+            "nucleos_cpu": 128,
+            "ram": "1 TB DDR4",
+            "almacenamiento": "15 TB NVMe SSD",
+            "consumo_energia": "6.5 kW",
+            "software": "CUDA 12.1, PyTorch 2.0, TensorFlow 2.13"
+          },
+          "disponible": true
+        },
+        {
+          "id": "investigador_vision",
+          "nombre": "Dr. Elena Rodríguez - Investigador Senior Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision & Deep Learning",
+            "experiencia": "8 años",
+            "titulacion": "PhD Computer Science - Stanford",
+            "certificaciones": ["NVIDIA DLI", "TensorFlow Developer", "PyTorch Certified"],
+            "habilidades": ["CNN", "Transformers", "GANs", "Object Detection"]
+          },
+          "disponible": true
+        },
+        {
+          "id": "lab_datos_sensibles",
+          "nombre": "Laboratorio de Datos Sensibles (Nivel 3 Seguridad)",
+          "tipo": "espacio",
+          "capacidad": 1,
+          "atributos": {
+            "capacidad_personas": 4,
+            "nivel_seguridad": 3,
+            "acceso": "Tarjeta + Biometría + PIN",
+            "equipamiento": ["Estaciones cifradas", "Almacenamiento encriptado"]
+          },
+          "disponible": true
+        },
+        {
+          "id": "cientifico_datos",
+          "nombre": "Científico de Datos",
+          "tipo": "humano",
+          "capacidad": 3,
+          "atributos": {
+            "especialidad": "Data Science",
+            "experiencia": "2+ años",
+            "certificaciones": ["Python", "Pandas", "Scikit-learn"]
+          },
+          "disponible": true
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "Fase 2 del proyecto Alpha. Entrenamiento del modelo DenseNet-201 con dataset de 50,000 imágenes dermatológicas anonimizadas.",
+      "prioridad": 5,
+      "metadata": {
+        "proyecto": "Alpha - IA Médica",
+        "responsable": "Dr. Elena Rodríguez",
+        "dataset": "skin_cancer_50k_v3",
+        "modelo": "DenseNet-201",
+        "epochs_planeados": 100
+      }
+    },
+    {
+      "id": "evento_inferencia_financiera",
+      "nombre": "Inferencia Masiva - Modelo GPT-Financiero",
+      "inicio": "2024-04-16T14:00:00",
+      "fin": "2024-04-16T18:00:00",
+      "recursos": [
+        {
+          "id": "cluster_gpu_v100",
+          "nombre": "Cluster GPU V100 (4x NVIDIA V100, 128GB)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "fabricante": "NVIDIA",
+            "modelo": "DGX Station",
+            "memoria_gpu": "128 GB",
+            "procesadores": "2x Intel Xeon Gold 6248",
+            "nucleos_cpu": 80,
+            "ram": "512 GB",
+            "almacenamiento": "10 TB SSD",
+            "consumo_energia": "3.2 kW"
+          },
+          "disponible": true
+        },
+        {
+          "id": "investigador_nlp",
+          "nombre": "Dr. Carlos Méndez - Investigador Senior NLP",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "NLP & Large Language Models",
+            "experiencia": "6 años",
+            "titulacion": "PhD Linguistics & CS - MIT",
+            "certificaciones": ["HuggingFace", "OpenAI API", "spaCy Expert"],
+            "habilidades": ["Transformers", "BERT", "GPT", "Fine-tuning"]
+          },
+          "disponible": true
+        }
+      ],
+      "tipo": "inferencia",
+      "descripcion": "Proceso de inferencia batch sobre 1M documentos financieros para análisis de riesgo. Modelo GPT-3.5 fine-tuned.",
+      "prioridad": 4,
+      "metadata": {
+        "proyecto": "FinGPT - Análisis de Riesgos",
+        "responsable": "Dr. Carlos Méndez",
+        "modelo": "gpt-3.5-turbo-ft",
+        "dataset_tamano": "1,000,000 documentos",
+        "cliente": "Banco Global Corp"
+      }
+    },
+    {
+      "id": "evento_reunion_semanal",
+      "nombre": "Reunión Semanal - Equipo de Investigación IA",
+      "inicio": "2024-04-12T16:00:00",
+      "fin": "2024-04-12T17:30:00",
+      "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Dr. Elena Rodríguez - Investigador Senior Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision & Deep Learning",
+            "experiencia": "8 años",
+            "titulacion": "PhD Computer Science - Stanford",
+            "certificaciones": ["NVIDIA DLI", "TensorFlow Developer", "PyTorch Certified"],
+            "habilidades": ["CNN", "Transformers", "GANs", "Object Detection"]
+          },
+          "disponible": true
+        },
+        {
+          "id": "investigador_nlp",
+          "nombre": "Dr. Carlos Méndez - Investigador Senior NLP",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "NLP & Large Language Models",
+            "experiencia": "6 años",
+            "titulacion": "PhD Linguistics & CS - MIT",
+            "certificaciones": ["HuggingFace", "OpenAI API", "spaCy Expert"],
+            "habilidades": ["Transformers", "BERT", "GPT", "Fine-tuning"]
+          },
+          "disponible": true
+        },
+        {
+          "id": "sala_reuniones",
+          "nombre": "Sala de Reuniones Principal",
+          "tipo": "espacio",
+          "capacidad": 1,
+          "atributos": {
+            "capacidad_personas": 12,
+            "equipamiento": ["Proyector 4K", "Sistema de video conferencia"]
+          },
+          "disponible": true
+        }
+      ],
+      "tipo": "reunión",
+      "descripcion": "Reunión semanal de coordinación. Revisión de progreso, planificación próxima semana, resolución de bloqueos.",
+      "prioridad": 2,
+      "metadata": {
+        "formato": "Presencial",
+        "agenda": ["progreso_semanal", "bloqueos", "planificacion"],
+        "participantes": ["todo_equipo_ia"]
+      }
+    }
+  ]
+}
