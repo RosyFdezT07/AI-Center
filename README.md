@@ -1,10 +1,8 @@
 # 🧠 Planificador Inteligente de Eventos - Centro de Investigación en IA
 
-https://img.shields.io/badge/Python-3.9+-blue 
-🐍 Python 3.9+ → "Necesario"      
-https://img.shields.io/badge/Streamlit-1.28+-FF4B4B     🎨Streamlit → "Tecnología usada" 
-https://img.shields.io/badge/Licencia-MIT-green
-📜 MIT License  →  "Puedes usarlo"  
+https://img.shields.io/badge/Python-3.9+-blue   🐍 Python 3.9+     
+https://img.shields.io/badge/Streamlit-1.28+-FF4B4B  🎨Streamlit  
+https://img.shields.io/badge/Licencia-MIT-green  📜 MIT License  
 
 Sistema profesional de planificación de eventos con recursos limitados
 __________________________________________________________________
@@ -50,6 +48,7 @@ En un centro de investigación de IA de alto nivel, los recursos son costosos, e
     -> Retrasar proyectos críticos por conflictos de recursos
 
 *📋 Recursos Modelados*
+
 💻 Recursos Computacionales
 
     Cluster GPU A100 - 8x NVIDIA A100, 320GB, $500K
@@ -125,7 +124,7 @@ RestriccionExclusionMutua(
 
 Justificación técnica: Limitación de infraestructura eléctrica y refrigeración.
 
-3. Límites de Capacidad (IMPLEMENTACIÓN EXTRA)
+3. Límites de Capacidad
 
     "Máximo X recursos por categoría"
 
@@ -172,6 +171,7 @@ __________________________________________________________________
 **🏗️ Arquitectura del Sistema**
 *📐 Diagrama de Arquitectura*
 
+```
 ┌─────────────────────────────────────────────────────────────┐
 │                    INTERFAZ WEB (Streamlit)                 │
 ├─────────────────────────────────────────────────────────────┤
@@ -189,6 +189,8 @@ __________________________________________________________________
 │  • Serialización/Deserialización                            │
 │  • Backup automático con timestamp                          │
 └─────────────────────────────────────────────────────────────┘
+```
+
 __________________________________________________________________
 **🚀 Instalación Rápida**
 *Prerrequisitos*
@@ -275,6 +277,7 @@ streamlit run app.py
     Sistema confirma y guarda planificación
 __________________________________________________________________
 **🔧 Estructura del Proyecto**
+```
 IA_Center/
 │
 ├── core/                    # Interfaces y tipos base
@@ -305,8 +308,9 @@ IA_Center/
 └── backups/          # Backups automáticos
 └── .gitignore
 └──  __init__.py
+```
 
-*📚Explicación de Módulos Clave*
+*📚 Explicación de Módulos Clave*
 dominio/restricciones.py - Cerebro del Sistema
 
 Implementa 3 tipos de restricciones:
@@ -398,7 +402,6 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
     ✅ Sistema de backup automático 
 
-    ✅ Migración de datos entre formatos
 __________________________________________________________________
     Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
 
@@ -407,19 +410,8 @@ __________________________________________________________________
 2. pip install -r requirements.txt
 3. streamlit run app.py
 
-# ✨ Características que hacen único este proyecto:
 
-    🧠 Dominio realista con restricciones significativas
-
-    🏗️ Arquitectura profesional siguiendo mejores prácticas
-
-    🎨 Interfaz moderna con tema personalizado
-
-    ⚡ Algoritmos eficientes para manejo a escala
-
-    📚 Documentación completa lista para evaluación
-
-Desarrollado con ❤️ para el curso de CC 1er año
+Desarrollado para el curso de CC 1er año
 Centro de Investigación en IA - Planificador Inteligente de Eventos
 📅 Enero 2026 • 🐍 Python 3.9+ • 🎨 Streamlit
 
