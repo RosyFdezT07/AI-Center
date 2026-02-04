@@ -126,8 +126,7 @@ class GestorRecursos:
 #Recursos predefinidos para el centro de IA
 def crear_recursos_predeterminados() -> GestorRecursos:
     """Crea los recursos predeterminados de un centro de investigación de IA"""
-    gestor = GestorRecursos()    
-    
+    gestor = GestorRecursos()  
     recursos_base = [
         # Recursos computacionales
         Recurso("cluster_gpu_a100", "Cluster GPU A100 (8x NVIDIA A100)", "computacional", 1, {

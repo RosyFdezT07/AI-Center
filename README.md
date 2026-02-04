@@ -37,7 +37,8 @@ Planificador Inteligente de Eventos es un sistema completo para gestionar la asi
     -> La planificación sea óptima y eficiente con búsqueda automática de huecos
 
 **🏛️ Dominio Elegido: Centro de Investigación en IA**
-🔬 Contexto del Dominio
+
+Contexto del Dominio
 
 En un centro de investigación de IA de alto nivel, los recursos son costosos, especializados y limitados. La planificación incorrecta puede:
 
@@ -80,6 +81,7 @@ En un centro de investigación de IA de alto nivel, los recursos son costosos, e
     Laboratorio de Prototipado - Impresoras 3D, sensores IoT
 
 *⚖️ Restricciones Implementadas*
+
 1. Co-requisitos (INCLUSIÓN)
 
     "Recurso A requiere Recurso B"
@@ -138,6 +140,7 @@ RestriccionCapacidad(
 Justificación organizacional: Grupos pequeños son más eficientes
 __________________________________________________________________
 **✨ Características Principales**
+
 *🎯 Planificación Inteligente*
 
     -> Validación en tiempo real de conflictos y restricciones
@@ -152,7 +155,7 @@ __________________________________________________________________
 
     -> Dashboard interactivo con métricas en tiempo real
 
-    -> Agenda por recurso visualización tipo timeline( eventos en orden cronológico)
+    -> Agenda por recurso visualización tipo timeline
 
     -> Filtros múltiples por tipo, estado, fecha
 
@@ -169,7 +172,8 @@ __________________________________________________________________
     -> Validación exhaustiva de todos los datos de entrada
 __________________________________________________________________
 **🏗️ Arquitectura del Sistema**
-*📐 Diagrama de Arquitectura*
+
+*Diagrama de Arquitectura*
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -193,6 +197,7 @@ __________________________________________________________________
 
 __________________________________________________________________
 **🚀 Instalación Rápida**
+
 *Prerrequisitos*
 
     Python 3.9 o superior
@@ -202,6 +207,7 @@ __________________________________________________________________
     500MB de espacio libre
 
 *📥 Instalación en 3 Pasos*
+
 # 1. Clonar el repositorio
 git clone https://github.com/rosmary-dev/AI_Center.git 
 cd AI_Center
@@ -211,6 +217,7 @@ python -m venv venv
 
 # En Windows:
 venv\Scripts\activate
+
 # En Linux/Mac:
 source venv/bin/activate
 
@@ -223,12 +230,15 @@ python -c "import pandas; print('✅ Pandas instalado')"
 python -c "import plotly; print('✅ Plotly instalado')"
 __________________________________________________________________
 **📊 Guía de Uso**
-*🎬 Iniciar la Aplicación*
+
+*Iniciar la Aplicación*
+
 streamlit run app.py
 
 *La aplicación se abrirá automáticamente en http://localhost:8501
 
 🖥️ Pantallas Principales
+
 1. 📊 Dashboard Principal
 
     Métricas clave: Recursos, eventos, ocupación
@@ -250,7 +260,7 @@ streamlit run app.py
 
     -> Parámetros: Duración, recursos necesarios, rango de fechas
 
-    -> Algoritmo: Búsqueda inteligente con saltos de 30 minutos
+    -> Algoritmo: Búsqueda inteligente con saltos de 10 minutos
 
     -> Resultados: Lista ordenada por proximidad
 
@@ -277,6 +287,7 @@ streamlit run app.py
     Sistema confirma y guarda planificación
 __________________________________________________________________
 **🔧 Estructura del Proyecto**
+
 ```
 IA_Center/
 │
@@ -311,6 +322,7 @@ IA_Center/
 ```
 
 *📚 Explicación de Módulos Clave*
+
 dominio/restricciones.py - Cerebro del Sistema
 
 Implementa 3 tipos de restricciones:
@@ -340,6 +352,7 @@ class Persistencia:
     def crear_backup(...)       # Backup con timestamp
 __________________________________________________________________
 **📄 Entregables**
+
 ✅ 1. Código Fuente
 
     -> 13 archivos Python organizados por responsabilidad
@@ -373,6 +386,7 @@ __________________________________________________________________
     -> Restricciones configuradas que muestran la lógica del sistema
 __________________________________________________________________
 **🏆 Desafíos Opcionales Implementados**
+
 1. Recursos con Cantidad (Pools de Recursos)
 class Recurso:
     def __init__(self, capacidad: int = 1):

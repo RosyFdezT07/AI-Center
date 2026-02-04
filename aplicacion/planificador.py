@@ -298,8 +298,8 @@ class Planificador:
                                 
                             }
                         }
-            #Avanzar 30 minutos
-            tiempo_actual += timedelta(minutes=30)
+            #Avanzar 10 minutos
+            tiempo_actual += timedelta(minutes=10)
             
         return {
             'success': False,
@@ -366,7 +366,7 @@ class Planificador:
                     })
                     
             # Si hay conflicto o no es válido, avanzar 10 minutos
-            tiempo_actual += timedelta(minutes=30)
+            tiempo_actual += timedelta(minutes=10)
         
         return huecos
         
@@ -505,34 +505,4 @@ class Planificador:
         except Exception as e:
             print(f"Error al guardar datos con Persistencia: {e}")
             return False
-        
-    
-        
-    
-               
-            
-            
-        
-        
-          
-          
-        
-        
-            
-                                
-        
-        
-                
-                    
-                         
-    
-    
-               
-                
-                
-        
-                           
-            
-                
-            
         

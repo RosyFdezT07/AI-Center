@@ -72,11 +72,11 @@ El sistema se estructuró en cuatro capas siguiendo principios de Arquitectura L
 
 **Capa Dominio**: Aquí reside el corazón del negocio. Se implementaron recursos, eventos y un sistema de restricciones, donde cada tipo de restricción es una estrategia concreta. 
 
-**Capa de Aplicación**: La clase `Planificador` actúa como orquestador , proporcionando una interfaz simplificada a la complejidad subyacente. Se implementó el patrón Template Method en `planificar_evento()` donde los pasos de validación son fijos pero ciertas operaciones (como la búsqueda de huecos alternativos) pueden variar.
+**Capa de Aplicación**: La clase `Planificador` actúa como orquestador , proporcionando una interfaz simplificada a la complejidad subyacente.
 
-**Capa de Infraestructura**: La clase `Persistencia` implementa el patrón Memento, permitiendo guardar y restaurar el estado completo del sistema. Se eligió JSON sobre bases de datos SQL por su simplicidad y adecuación a la escala esperada (cientos, no miles, de eventos).
+**Capa de Infraestructura**: La clase `Persistencia`, permite guardar y restaurar el estado completo del sistema. Se eligió JSON sobre bases de datos SQL por su simplicidad y adecuación a la escala esperada (cientos, no miles, de eventos).
 
-### **2.3 Decisiones de Diseño Clave y su Justificación**
+### *2.3 Decisiones de Diseño Clave y su Justificación*
 
 **Modelado de Recursos con Capacidad**: En lugar de modelar cada estación de trabajo RTX 4090 como recurso individual, se optó por un recurso "Estación RTX 4090" con capacidad=4. Esta decisión redujo la complejidad de la interfaz de usuario (los usuarios seleccionan "cuántas" necesitan, no "cuáles específicamente") y simplificó la persistencia. La alternativa (recursos individuales) habría requerido nombrar cada estación (RTX_4090_01, RTX_4090_02) complicando innecesariamente la selección.
 
@@ -84,9 +84,9 @@ El sistema se estructuró en cuatro capas siguiendo principios de Arquitectura L
 
 **Patrón de Búsqueda por Intervalos**: Para la búsqueda de huecos, se implementó un algoritmo que avanza en intervalos de 10 minutos en lugar de evaluar todos los posibles intervalos continuos. Esta decisión, aunque podría perder algunos huecos de duración no múltiplo de 10 minutos, redujo la complejidad computacional de O(n²) a O(n) para la búsqueda. En la práctica, la precisión de 10 minutos es suficiente para el dominio.
 
-## **3. Desarrollo y Desafíos Técnicos**
+## 3. Desarrollo y Desafíos Técnicos
 
-### **3.1 Proceso de Desarrollo Iterativo**
+### *3.1 Proceso de Desarrollo Iterativo*
 
 El desarrollo siguió una metodología incremental con retrospectivas después de cada hito:
 
@@ -111,10 +111,10 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
 **Iteración 4 (3 semanas): Interfaz de usuario y optimizaciones**
 - Se desarrolló la interfaz Streamlit con dashboard y formularios
 - **Problema encontrado**: La recarga completa de la página con cada interacción era lenta
-- **Solución**: Se implementó uso intensivo de `st.session_state` para mantener estado entre interacciones
+- **Solución**: Se implementó uso intensivo de `st.session_state` para mantener estado entre interacciones Se implementó el patrón Template Method en `planificar_evento()` donde los pasos de validación son fijos pero ciertas operaciones (como la búsqueda de huecos alternativos) pueden variar.
 - **Aprendizaje**: Las aplicaciones web interactivas requieren gestión cuidadosa del estado del cliente
 
-### **3.2 Problemas Técnicos Específicos y Soluciones**
+### *3.2 Problemas Técnicos Específicos y Soluciones*
 
 **Problema 1: Algoritmo ineficiente para verificación de conflictos**
 - **Situación inicial**: El método `verificar_conflictos()` comparaba el nuevo evento con todos los eventos existentes, complejidad O(n²). Con 100 eventos, requería 10,000 comparaciones.
@@ -150,9 +150,9 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
 - **Solución implementada**: Se centralizó el estado en `st.session_state['planificador']` y se forzó rerun después de operaciones mutadoras usando `st.rerun()`.
 - **Resultado**: Experiencia de usuario consistente con actualización en tiempo real.
 
-## **4. Lógica del Sistema "Tras Bambalinas"**
+## 4. Lógica del Sistema 
 
-### **4.1 Algoritmo de Planificación de Eventos (Paso a Paso)**
+### *4.1 Algoritmo de Planificación de Eventos (Paso a Paso)*
 
 Cuando un usuario solicita planificar un nuevo evento, el sistema ejecuta una secuencia de validaciones cada vez más costosas computacionalmente:
 
@@ -187,7 +187,7 @@ def planificar_evento(self, ...):
     return éxito
 ```
 
-**Innovación en el paso 4**: En lugar del enfoque naive de comparar intervalos por pares, el algoritmo transforma el problema a uno de "máima superposición en puntos". Para cada recurso:
+**Innovación en el paso 4**: En lugar del enfoque de comparar intervalos por pares, el algoritmo transforma el problema a uno de "máxima superposición en puntos". Para cada recurso:
 - Se extraen todos los intervalos de eventos existentes que usan ese recurso y se solapan con el nuevo evento
 - Se convierten a puntos (inicio: +cantidad, fin: -cantidad)
 - Se ordenan y se barre acumulando, encontrando el máximo simultáneo
@@ -195,7 +195,7 @@ def planificar_evento(self, ...):
 
 Este algoritmo es óptimo para el problema y se ejecuta en tiempo O(n log n) para cada recurso.
 
-### **4.2 Sistema de Restricciones como Motor de Inferencia**
+### *4.2 Sistema de Restricciones como Motor de Inferencia*
 
 Las restricciones implementan un sistema de lógica proposicional básica:
 
@@ -213,12 +213,7 @@ Las restricciones implementan un sistema de lógica proposicional básica:
 - Σ(cantidad_solicitada(recurso) ∀ recurso ∈ tipo) ≤ límite
 - Requiere mantener contadores por tipo de recurso
 
-El sistema puede extenderse fácilmente con nuevos tipos de restricciones como:
-- **RestriccionPrecedencia**: Evento A debe terminar antes que evento B empiece
-- **RestriccionAgrupacion**: Si se usa recurso A, también deben usarse todos los recursos del conjunto {B, C, D}
-- **RestriccionPresupuesto**: Costo total de recursos ≤ límite presupuestario
-
-### **4.3 Persistencia como Sistema de Versionado Implícito**
+### *4.3 Persistencia como Sistema de Versionado Implícito*
 
 El sistema de persistencia implementa características avanzadas:
 
@@ -261,27 +256,9 @@ def cargar_sistema(archivo):
 - Conteos de recursos y eventos
 - Checksum para detección de corrupción
 
-## **5. Lecciones Aprendidas y Conclusiones**
+## 5. Conclusiones
 
-### **5.1 Lecciones Técnicas**
-
-1. **Las operaciones con tiempo son más complejas de lo esperado**: Inicialmente se subestimó la complejidad de manejar zonas horarias, horarios de verano, y comparaciones de intervalos. La lección fue adoptar UTC como estándar interno desde el inicio y realizar conversiones solo en los límites del sistema.
-
-2. **El diseño de interfaces afecta profundamente la extensibilidad**: La decisión temprana de definir protocolos (`IRecursoProtocol`, `IEventoProtocol`) permitió desarrollar módulos en paralelo y realizar pruebas unitarias aisladas. En contraste, el sistema de restricciones inicial (con validación acoplada a la lógica temporal) requirió refactorización significativa.
-
-3. **La persistencia de objetos relacionados requiere estrategia**: El primer intento de usar `pickle` para serialización fue abandonado por problemas de portabilidad y versionado. JSON manual requirió más código pero resultó en un sistema más robusto y debuggable.
-
-4. **Las interfaces de usuario consumen más tiempo del planeado**: El 40% del tiempo de desarrollo se dedicó a la interfaz Streamlit, particularmente a manejar estado entre interacciones y proporcionar feedback inmediato. La lección fue construir primero una API CLI funcional y luego añadir la interfaz gráfica.
-
-### **5.2 Lecciones de Proceso**
-
-1. **El diseño previo paga dividendos**: Las 2 semanas dedicadas a modelado de dominio y diseño de algoritmos evitaron al menos 3 refactorizaciones mayores durante la implementación. Los diagramas de secuencia iniciales, aunque incompletos, sirvieron como "mapa" durante el desarrollo.
-
-2. **Las pruebas deberían escribirse junto con el código**: Inicialmente se pospuso la escritura de tests, lo que resultó en dificultad para depurar el sistema de restricciones. Cuando se adoptó TDD para el módulo de persistencia, la calidad del código mejoró notablemente.
-
-3. **La documentación viva es esencial**: Mantener el README.md actualizado en cada hito mayor evitó la "amnesia de proyecto" y facilitó la reintegración después de interrupciones.
-
-### **5.3 Conclusiones**
+### *5.3 Conclusiones*
 
 El proyecto resultó en un sistema robusto que no solo cumple con los requisitos básicos sino que implementa funcionalidades avanzadas propias de sistemas profesionales. La arquitectura por capas demostró ser efectiva para manejar la complejidad, permitiendo que cada módulo evolucionara independientemente.
 
