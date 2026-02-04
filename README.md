@@ -288,7 +288,7 @@ Sistema verifica disponibilidad inmediata
 Si hay conflicto, busca hueco automáticamente
 
 Sistema confirma y guarda planificación
-__________________________________________________________________
+
 # *🔧 Estructura del Proyecto:*
 
 ```
@@ -378,7 +378,7 @@ infraestructura/persistencia.py - Gestor de Estado
         @staticmethod
         def crear_backup(...)      
          # Backup con timestamp
-__________________________________________________________________
+
 # *📄 Entregables*
 
 1. Código Fuente
@@ -412,7 +412,7 @@ __________________________________________________________________
     -> Eventos de ejemplo que demuestran todas las funcionalidades
 
     -> Restricciones configuradas que muestran la lógica del sistema
-__________________________________________________________________
+
 # *🏆 Desafíos Opcionales Implementados:*
 
 1. Recursos con Cantidad (Pools de Recursos)
@@ -444,7 +444,7 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
  Sistema de backup automático 
 
-__________________________________________________________________
+
 Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
 
 Desarrollado para el curso de Ciencias de la Computación 1er año
