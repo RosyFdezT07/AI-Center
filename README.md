@@ -4,9 +4,9 @@ https://img.shields.io/badge/Python-3.9+-blue   🐍 Python 3.9+
 https://img.shields.io/badge/Streamlit-1.28+-FF4B4B  🎨Streamlit  
 https://img.shields.io/badge/Licencia-MIT-green  📜 MIT License  
 
-*Sistema profesional de planificación de eventos con recursos limitados*
+Sistema profesional de planificación de eventos con recursos limitados
 
-**📖 Tabla de Contenidos**
+# *Tabla de Contenidos*
 
 🎯 Descripción del Proyecto
 
@@ -26,7 +26,7 @@ https://img.shields.io/badge/Licencia-MIT-green  📜 MIT License
 
 🏆 Desafíos Opcionales
 
-**🎯 Descripción del Proyecto**
+# *🎯 Descripción del Proyecto*
 
 El Planificador Inteligente de Eventos es una solución completa desarrollada para la gestión optimizada de recursos altamente especializados en centros de investigación de Inteligencia Artificial. Este sistema resuelve uno de los problemas más críticos en entornos académicos y de investigación: la asignación eficiente de recursos limitados y costosos a múltiples proyectos que compiten por ellos en el tiempo. El sistema garantiza que:
 
@@ -36,7 +36,9 @@ El Planificador Inteligente de Eventos es una solución completa desarrollada pa
 
 • La planificación sea óptima y eficiente con búsqueda automática de huecos
 
-**🏛️ Dominio Elegido: Centro de Investigación en IA**
+# *🏛️ Dominio Elegido:* 
+
+**Centro de Investigación en IA**
 
 Contexto del Dominio
 
@@ -139,7 +141,7 @@ RestriccionCapacidad(
 
 Justificación organizacional: Grupos pequeños son más eficientes
 
-**✨ Características Principales**
+# *✨ Características Principales:*
 
 *🧠 Planificación Inteligente*
 
@@ -171,7 +173,7 @@ Justificación organizacional: Grupos pequeños son más eficientes
 
 • Validación exhaustiva de todos los datos de entrada
 
-**🏗️ Arquitectura del Sistema**
+# *🏗️ Arquitectura del Sistema:*
 
 *Diagrama de Arquitectura*
 
@@ -196,7 +198,7 @@ Justificación organizacional: Grupos pequeños son más eficientes
 ```
 
 
-**🚀 Instalación Rápida**
+# *🚀 Instalación Rápida:*
 
 *Prerrequisitos*
 
@@ -232,7 +234,7 @@ python -c "import pandas; print('✅ Pandas instalado')"
 
 python -c "import plotly; print('✅ Plotly instalado')"
 
-**📊 Guía de Uso**
+# *📊 Guía de Uso:*
 
 *Iniciar la Aplicación*
 
@@ -287,7 +289,7 @@ Si hay conflicto, busca hueco automáticamente
 
 Sistema confirma y guarda planificación
 __________________________________________________________________
-**🔧 Estructura del Proyecto**
+# *🔧 Estructura del Proyecto:*
 
 ```
 AI-Center/
@@ -377,7 +379,7 @@ infraestructura/persistencia.py - Gestor de Estado
         def crear_backup(...)      
          # Backup con timestamp
 __________________________________________________________________
-**📄 Entregables**
+# *📄 Entregables*
 
 1. Código Fuente
 
@@ -411,7 +413,7 @@ __________________________________________________________________
 
     -> Restricciones configuradas que muestran la lógica del sistema
 __________________________________________________________________
-**🏆 Desafíos Opcionales Implementados**
+# *🏆 Desafíos Opcionales Implementados:*
 
 1. Recursos con Cantidad (Pools de Recursos)
 class Recurso:
