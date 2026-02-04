@@ -4,8 +4,8 @@ https://img.shields.io/badge/Python-3.9+-blue   🐍 Python 3.9+
 https://img.shields.io/badge/Streamlit-1.28+-FF4B4B  🎨Streamlit  
 https://img.shields.io/badge/Licencia-MIT-green  📜 MIT License  
 
-Sistema profesional de planificación de eventos con recursos limitados
-__________________________________________________________________
+*Sistema profesional de planificación de eventos con recursos limitados*
+
 **📖 Tabla de Contenidos**
 
 🎯 Descripción del Proyecto
@@ -25,7 +25,7 @@ __________________________________________________________________
 📄 Entregables
 
 🏆 Desafíos Opcionales
-__________________________________________________________________
+
 **🎯 Descripción del Proyecto**
 
 El Planificador Inteligente de Eventos es una solución completa desarrollada para la gestión optimizada de recursos altamente especializados en centros de investigación de Inteligencia Artificial. Este sistema resuelve uno de los problemas más críticos en entornos académicos y de investigación: la asignación eficiente de recursos limitados y costosos a múltiples proyectos que compiten por ellos en el tiempo. El sistema garantiza que:
@@ -138,7 +138,7 @@ RestriccionCapacidad(
 )
 
 Justificación organizacional: Grupos pequeños son más eficientes
-__________________________________________________________________
+
 **✨ Características Principales**
 
 *🧠 Planificación Inteligente*
@@ -170,7 +170,7 @@ __________________________________________________________________
 • Migración automática de formatos antiguos
 
 • Validación exhaustiva de todos los datos de entrada
-__________________________________________________________________
+
 **🏗️ Arquitectura del Sistema**
 
 *Diagrama de Arquitectura*
@@ -195,7 +195,7 @@ __________________________________________________________________
 └─────────────────────────────────────────────────────────────┘
 ```
 
-__________________________________________________________________
+
 **🚀 Instalación Rápida**
 
 *Prerrequisitos*
@@ -231,7 +231,7 @@ python -c "import streamlit; print('✅ Streamlit instalado')"
 python -c "import pandas; print('✅ Pandas instalado')"
 
 python -c "import plotly; print('✅ Plotly instalado')"
-__________________________________________________________________
+
 **📊 Guía de Uso**
 
 *Iniciar la Aplicación*
@@ -258,8 +258,8 @@ Alertas: Conflictos inminentes, recursos sobreutilizados
 3. Hora de inicio: 14:00
 4. Fecha de fin: 05/01/2026
 5. Hora de fin: 18:00
-4. Recursos: Cluster GPU A100 + Investigador Visión
-5. Prioridad: ⭐⭐⭐⭐⭐ (Crítico)
+6. Recursos: Cluster GPU A100 + Investigador Visión
+7. Prioridad: ⭐⭐⭐⭐⭐ (Crítico)
 
 3. 🔍 Búsqueda de Huecos
 
