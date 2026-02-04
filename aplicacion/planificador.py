@@ -17,7 +17,7 @@ class Planificador:
     """Clase principal que integra todo el proceso de planificación"""
     
     def __init__(self, datos_dir :str = "datos"):
-        #Si a la función no se le especifica los datos_dir, automáticamente genera el parámetro "datos" por defecto
+        # Si a la función no se le especifica los datos_dir, automáticamente genera el parámetro "datos" por defecto
         """Inicializa el planificador con gestor de recursos, gestor de eventos y restricciones """
         
         self.datos_dir = datos_dir
@@ -37,7 +37,7 @@ class Planificador:
         for recurso in recursos_predeterminados.recursos.values():  # crear_recursos_predeterminados() devuelve GestorRecursos
             self.gestor_recursos.agregar_recurso(recurso)
         
-        print(f"✅ Cargados {len(self.gestor_recursos)} recursos predeterminados")
+        print(f" Cargados {len(self.gestor_recursos)} recursos predeterminados")
             
 
     def planificar_evento(
@@ -53,7 +53,7 @@ class Planificador:
     ) ->Dict[str, Any]:
         """
         Intenta planificar un nuevo evento
-        return Resultado de la operación 
+        Return: Resultado de la operación 
         """
         resultado = {
             "success": False,
@@ -63,7 +63,7 @@ class Planificador:
         }
             
         try:
-            #Validar parámetros básicos
+            # Validar parámetros básicos
             ahora = datetime.now()
             fecha_minima = datetime(2020, 1, 1)
             año_actual = datetime.now().year
@@ -94,7 +94,7 @@ class Planificador:
                 return resultado
 
             
-            #Obtener recursos
+            # Obtener recursos
             recursos = []
             for recurso_id, cantidad in recursos_seleccionados.items():
                 recurso = self.gestor_recursos.obtener_recurso(recurso_id)
@@ -106,7 +106,7 @@ class Planificador:
                     resultado["message"] = "La cantidad solicitada supera la capacidad" 
                     return resultado
                 
-                #Agregar el recurso la cantidad de veces especificada
+                # Agregar el recurso la cantidad de veces especificada
                 for i in range(cantidad):
                     recursos.append(recurso)
                     
@@ -121,21 +121,21 @@ class Planificador:
                 prioridad = prioridad,
             )
             
-            #validar restricciones
+            # Validar restricciones
             es_valido, errores = validar_restricciones(recursos, evento_temp, self.restricciones)
             if not es_valido:
                 resultado["message"] = f'Violación de restricciones: {", ".join(errores)}'
                 return resultado
             
-            #verificar disponibilidad
+            # Verificar disponibilidad
             errores = []
 
-            # 1. Verificar Conflictos de Recursos (Capacidad/Pools)
+            # Verificar Conflictos de Recursos (Capacidad/Pools)
             sin_conflictos, errores_conflictos = self.verificar_conflictos(evento_temp)
             if not sin_conflictos:
                 errores.extend(errores_conflictos)
                 if buscar_hueco_si_ocupado:
-                    #Buscar hueco automáticamente
+                    # Buscar hueco automáticamente
                     return self.buscar_hueco_automático(
                         nombre, inicio, fin, recursos, tipo, descripcion, prioridad
                         )
@@ -143,7 +143,7 @@ class Planificador:
                     resultado["message"] = f"{errores}"
                     return resultado  
             
-            #Crear y agregar evento
+            # Crear y agregar evento
             evento = Evento(
                 nombre = nombre,
                 inicio = inicio,
@@ -174,19 +174,19 @@ class Planificador:
     def verificar_conflictos(self, nuevo_evento: Evento) -> Tuple[bool, List[str]]:
         errores = []
         
-        # agrupar la demanda del nuevo evento
+        # Agrupar la demanda del nuevo evento
         demanda_nuevo = {}
         for r in nuevo_evento.recursos:
             demanda_nuevo[r.id] = demanda_nuevo.get(r.id, 0) + 1
             
-        # verificar cada recurso solicitado
+        # Verificar cada recurso solicitado
         for id_recurso, cantidad_solicitada in demanda_nuevo.items():
             recurso = self.gestor_recursos.obtener_recurso(id_recurso)
             if not recurso:
                 errores.append(f"Recurso {id_recurso} no existe.")
                 continue
 
-            # Obtener SOLO los eventos que usan este recurso y se solapan con el nuevo
+            # Obtener solo los eventos que usan este recurso y se solapan con el nuevo
             eventos_interes = [
                 ev for ev in self.gestor_eventos.eventos.values()
                 if ev.id != nuevo_evento.id 
@@ -253,11 +253,11 @@ class Planificador:
         # Buscar en los próximos 7 días
         limite_busqueda = tiempo_actual + timedelta(days=7)
         while tiempo_actual < limite_busqueda:
-            #Intenta para cada hora 
+            # Intenta para cada 10 minutos 
             tiempo_intento = tiempo_actual
             tiempo_fin_intento = tiempo_actual + duracion
         
-            #Crear evento de prueba
+            # Crear evento de prueba
             evento_prueba = Evento(
                 nombre = nombre,
                 inicio = tiempo_intento,
@@ -268,11 +268,11 @@ class Planificador:
                 prioridad = prioridad
             )
         
-            #Verificar si hay conflicto 
+            # Verificar si hay conflicto 
             sin_conflictos, errores_conflictos = self.verificar_conflictos(evento_prueba)
             
             if sin_conflictos:
-                #También verificar restricciones 
+                # También verificar restricciones 
                 es_valido, mensajes_error = validar_restricciones(recursos, evento_prueba, self.restricciones)
                 if es_valido:
                     # Crear el evento y agregarlo de forma definitiva
@@ -298,7 +298,7 @@ class Planificador:
                                 
                             }
                         }
-            #Avanzar 10 minutos
+            # Avanzar 10 minutos
             tiempo_actual += timedelta(minutes=10)
             
         return {
@@ -437,15 +437,15 @@ class Planificador:
                 
                 # Si no hay restricciones, crear predeterminadas
                 if not restricciones or len(restricciones) == 0:
-                    print("⚠️ No se encontraron restricciones, creando predeterminadas...")
+                    print(" No se encontraron restricciones, creando predeterminadas...")
                     restricciones = crear_restricciones_predeterminadas()
                 
                 self.restricciones = restricciones
-                print(f"✅ Datos cargados desde {archivo} - {len(restricciones)} restricciones")
+                print(f" Datos cargados desde {archivo} - {len(restricciones)} restricciones")
                 return True
                 
             except Exception as e:
-                print(f"❌ Error al cargar datos: {e}")
+                print(f" Error al cargar datos: {e}")
                 # Continuar con formato antiguo
         
         # Si no existe o falla, intentar cargar formato antiguo para compatibilidad
