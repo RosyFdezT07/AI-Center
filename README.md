@@ -420,7 +420,7 @@ __________________________________________________________________
     Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
 
     # Últimos pasos para comenzar:
-1. git clone https://github.com/tu-usuario/planificador-ia
+1. git clone https://github.com/RosyFdezT07/IA-Center
 2. pip install -r requirements.txt
 3. streamlit run app.py
 
