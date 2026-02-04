@@ -8,33 +8,33 @@ Sistema profesional de planificación de eventos con recursos limitados
 __________________________________________________________________
 **📖 Tabla de Contenidos**
 
-    🎯 Descripción del Proyecto
+🎯 Descripción del Proyecto
 
-    🏛️ Dominio Elegido
+🏛️ Dominio Elegido
 
-    ✨ Características Principales
+✨ Características Principales
 
-    🏗️ Arquitectura del Sistema
+🏗️ Arquitectura del Sistema
 
-    🚀 Instalación Rápida
+🚀 Instalación Rápida
 
-    📊 Guía de Uso
+📊 Guía de Uso
 
-    🔧 Estructura del Proyecto
+🔧 Estructura del Proyecto
 
-    📄 Entregables
+📄 Entregables
 
-    🏆 Desafíos Opcionales
+🏆 Desafíos Opcionales
 __________________________________________________________________
 **🎯 Descripción del Proyecto**
 
-Planificador Inteligente de Eventos es un sistema completo para gestionar la asignación de recursos limitados en un centro de investigación de Inteligencia Artificial. El sistema garantiza que:
+El Planificador Inteligente de Eventos es una solución completa desarrollada para la gestión optimizada de recursos altamente especializados en centros de investigación de Inteligencia Artificial. Este sistema resuelve uno de los problemas más críticos en entornos académicos y de investigación: la asignación eficiente de recursos limitados y costosos a múltiples proyectos que compiten por ellos en el tiempo. El sistema garantiza que:
 
-    -> Ningún recurso se asigne a más de un evento simultáneamente
+• Ningún recurso se asigne a más de un evento simultáneamente
 
-    -> Se respeten reglas de negocio complejas (restricciones personalizadas)
+• Se respeten reglas de negocio complejas (restricciones personalizadas)
 
-    -> La planificación sea óptima y eficiente con búsqueda automática de huecos
+• La planificación sea óptima y eficiente con búsqueda automática de huecos
 
 **🏛️ Dominio Elegido: Centro de Investigación en IA**
 
@@ -42,51 +42,51 @@ Contexto del Dominio
 
 En un centro de investigación de IA de alto nivel, los recursos son costosos, especializados y limitados. La planificación incorrecta puede:
 
-    -> Costar miles de dólares en tiempo de GPU desperdiciado
+• Costar miles de dólares en tiempo de GPU desperdiciado
 
-    -> Violar normativas de seguridad con datos sensibles
+• Violar normativas de seguridad con datos sensibles
 
-    -> Retrasar proyectos críticos por conflictos de recursos
+• Retrasar proyectos críticos por conflictos de recursos
 
-*📋 Recursos Modelados*
+*Recursos Modelados*
 
 💻 Recursos Computacionales
 
-    Cluster GPU A100 - 8x NVIDIA A100, 320GB, $500K
+Cluster GPU A100 - 8x NVIDIA A100, 320GB, $500K
 
-    Cluster GPU V100 - 4x NVIDIA V100, 128GB, $250K
+Cluster GPU V100 - 4x NVIDIA V100, 128GB, $250K
 
-    Servidor CPU High-Memory - 2TB RAM, 128 núcleos
+Servidor CPU High-Memory - 2TB RAM, 128 núcleos
 
-    Estación de Trabajo RTX 4090 - 4 unidades disponibles
+Estación de Trabajo RTX 4090 - 4 unidades disponibles
 
 👨‍🔬 Recursos Humanos
 
-    Investigador Senior - Visión Computacional - PhD, 5+ años experiencia
+Investigador Senior - Visión Computacional - PhD, 5+ años experiencia
 
-    Investigador Senior - NLP - Especialista en Large Language Models
+Investigador Senior - NLP - Especialista en Large Language Models
 
-    Ingeniero de MLOps - DevOps para Machine Learning
+Ingeniero de MLOps - DevOps para Machine Learning
 
-    Científico de Datos - Análisis estadístico avanzado
+Científico de Datos - Análisis estadístico avanzado
 
 🏢 Espacios
 
-    Laboratorio de Datos Sensibles - Nivel 3 seguridad, HIPAA/GDPR
+Laboratorio de Datos Sensibles - Nivel 3 seguridad, HIPAA/GDPR
 
-    Sala de Servidores - Temperatura controlada, UPS redundante
+Sala de Servidores - Temperatura controlada, UPS redundante
 
-    Sala de Reuniones Principal - Capacidad 12 personas, proyector 4K
+Sala de Reuniones Principal - Capacidad 12 personas, proyector 4K
 
-    Laboratorio de Prototipado - Impresoras 3D, sensores IoT
+Laboratorio de Prototipado - Impresoras 3D, sensores IoT
 
 *⚖️ Restricciones Implementadas*
 
-1. Co-requisitos (INCLUSIÓN)
+1.Co-requisitos (INCLUSIÓN)
 
     "Recurso A requiere Recurso B"
 
--> Ejemplo 1: Cluster GPU requiere Investigador Especializado
+• Ejemplo 1: Cluster GPU requiere Investigador Especializado
 
 RestriccionCoRequisito(
     principal="cluster_gpu_a100",
@@ -95,7 +95,7 @@ RestriccionCoRequisito(
 
 Justificación de negocio: Un cluster de $500K sin experto es hardware subutilizado y riesgoso.
 
--> Ejemplo 2: Laboratorio de datos sensibles requiere Científico de Datos
+• Ejemplo 2: Laboratorio de datos sensibles requiere Científico de Datos
 
 RestriccionCoRequisito(
     principal="lab_datos_sensibles",
@@ -104,20 +104,20 @@ RestriccionCoRequisito(
 
 Justificación de seguridad: Datos médicos requieren supervisión especializada.
 
-2. Exclusiones Mutuas (EXCLUSIÓN)
+2.Exclusiones Mutuas (EXCLUSIÓN)
 
     "Recurso A NO puede usarse con Recurso B"
 
--> Ejemplo 1: Datos sensibles NO en cloud público
+• Ejemplo 1: Datos sensibles NO en cloud público
 
 RestriccionExclusionMutua(
     recurso_a="lab_datos_sensibles",
     recurso_b="servidor_externo"
 )
 
-Justificación de seguridad: Cumplimiento GDPR/HIPAA para datos médicos/gubernamentales.
+Justificación de seguridad: Cumplimiento de normas para datos médicos/gubernamentales.
 
--> Ejemplo 2: No mezclar clusters GPU grandes
+• Ejemplo 2: No mezclar clusters GPU grandes
 
 RestriccionExclusionMutua(
     recurso_a="cluster_gpu_a100",
@@ -126,11 +126,11 @@ RestriccionExclusionMutua(
 
 Justificación técnica: Limitación de infraestructura eléctrica y refrigeración.
 
-3. Límites de Capacidad
+3.Límites de Capacidad
 
     "Máximo X recursos por categoría"
 
--> Ejemplo: Máximo 4 personas por evento
+• Ejemplo: Máximo 4 personas por evento
 
 RestriccionCapacidad(
     tipo_recurso="humano",
@@ -141,35 +141,35 @@ Justificación organizacional: Grupos pequeños son más eficientes
 __________________________________________________________________
 **✨ Características Principales**
 
-*🎯 Planificación Inteligente*
+*🧠 Planificación Inteligente*
 
-    -> Validación en tiempo real de conflictos y restricciones
+• Validación en tiempo real de conflictos y restricciones
 
-    -> Búsqueda automática de huecos en los próximos 7 días
+• Búsqueda automática de huecos en los próximos 7 días
 
-    -> Priorización inteligente de eventos (1-5 estrellas)
+• Priorización inteligente de eventos (1-5 estrellas)
 
-    -> Manejo de márgenes de 15 minutos entre eventos para verificar solapamiento
+• Manejo de márgenes de 15 minutos entre eventos para verificar solapamiento
 
 *🔍 Gestión Avanzada*
 
-    -> Dashboard interactivo con métricas en tiempo real
+• Dashboard interactivo con métricas en tiempo real
 
-    -> Agenda por recurso visualización tipo timeline
+• Agenda por recurso visualización tipo timeline
 
-    -> Filtros múltiples por tipo, estado, fecha
+• Filtros múltiples por tipo, estado, fecha
 
-    -> Exportación/Importación completa del estado del sistema
+• Exportación/Importación completa del estado del sistema
 
 *🛡️ Robustez* 
 
-    -> Persistencia completa con sistema de backup automático
+• Persistencia completa con sistema de backup automático
 
-    -> Manejo de errores con mensajes claros al usuario
+• Manejo de errores con mensajes claros al usuario
 
-    -> Migración automática de formatos antiguos
+• Migración automática de formatos antiguos
 
-    -> Validación exhaustiva de todos los datos de entrada
+• Validación exhaustiva de todos los datos de entrada
 __________________________________________________________________
 **🏗️ Arquitectura del Sistema**
 
@@ -200,33 +200,36 @@ __________________________________________________________________
 
 *Prerrequisitos*
 
-    Python 3.9 o superior
+Python 3.9 o superior
 
-    pip (gestor de paquetes de Python)
+pip (gestor de paquetes de Python)
 
-    500MB de espacio libre
+500MB de espacio libre
 
-*📥 Instalación en 3 Pasos*
+*Instalación en 3 Pasos*
 
-# 1. Clonar el repositorio
-git clone https://github.com/rosmary-dev/AI_Center.git 
-cd AI_Center
+**1. Clonar el repositorio**
+git clone https://github.com/RosyFdezT07/AI-Center 
+cd AI-Center
 
-# 2. Crear entorno virtual (recomendado)
+**2. Crear entorno virtual** (recomendado)
 python -m venv venv
 
-# En Windows:
+*En Windows:*
 venv\Scripts\activate
 
-# En Linux/Mac:
+*En Linux/Mac:*
 source venv/bin/activate
 
-# 3. Instalar dependencias
+**3. Instalar dependencias**
 pip install -r requirements.txt
 
-*✅ Verificar Instalación*
+*Verificar Instalación*
+
 python -c "import streamlit; print('✅ Streamlit instalado')"
+
 python -c "import pandas; print('✅ Pandas instalado')"
+
 python -c "import plotly; print('✅ Plotly instalado')"
 __________________________________________________________________
 **📊 Guía de Uso**
@@ -239,84 +242,99 @@ streamlit run app.py
 
 🖥️ Pantallas Principales
 
-1. 📊 Dashboard Principal
+1.📊 Dashboard Principal
 
-    Métricas clave: Recursos, eventos, ocupación
+• Métricas clave: Recursos, eventos, ocupación
 
-    Eventos próximos: Próximos 7 días
+• Eventos próximos: Próximos 7 días
 
-    Alertas: Conflictos inminentes, recursos sobreutilizados
+Alertas: Conflictos inminentes, recursos sobreutilizados
 
-2. 📅 Gestión de Eventos
+2.📅 Gestión de Eventos
 
-# Ejemplo: Planificar nuevo evento
+**Ejemplo: Planificar nuevo evento**
 1. Nombre: "Entrenamiento Modelo Detección Cáncer"
-2. Fecha: 15/04/2024 14:00
-3. Duración: 4 horas
+2. Fecha de inicio: 05/01/2026 
+3. Hora de inicio: 14:00
+4. Fecha de fin: 05/01/2026
+5. Hora de fin: 18:00
 4. Recursos: Cluster GPU A100 + Investigador Visión
 5. Prioridad: ⭐⭐⭐⭐⭐ (Crítico)
 
 3. 🔍 Búsqueda de Huecos
 
-    -> Parámetros: Duración, recursos necesarios, rango de fechas
+• Parámetros: Duración, recursos necesarios, rango de fechas
 
-    -> Algoritmo: Búsqueda inteligente con saltos de 10 minutos
+• Algoritmo: Búsqueda inteligente con saltos de 10 minutos
 
-    -> Resultados: Lista ordenada por proximidad
+• Resultados: Visualización de los próximos 10 huecos disponibles
 
 4. 🔧 Gestión de Recursos
 
-    -> Inventario completo: Ver todos los recursos disponibles
+• Inventario completo: Ver todos los recursos disponibles
 
-    -> Agenda por recurso: Timeline de uso específico
+• Agenda por recurso: Timeline de uso específico
 
-    -> Estadísticas
+• Estadísticas
 
-*🎯 Flujo de Trabajo Típico*
+*Flujo de Trabajo Típico*
 
-    Investigador necesita recursos específicos
+Investigador necesita recursos específicos
 
-    Sistema verifica disponibilidad inmediata
+Sistema verifica disponibilidad inmediata
 
-    Si hay conflicto, busca hueco automáticamente
+Si hay conflicto, busca hueco automáticamente
 
-    Muestra opciones disponibles
-
-    Usuario selecciona mejor opción
-
-    Sistema confirma y guarda planificación
+Sistema confirma y guarda planificación
 __________________________________________________________________
 **🔧 Estructura del Proyecto**
 
 ```
-IA_Center/
+AI-Center/
 │
-├── core/                    # Interfaces y tipos base
+├── core/                    
+# Interfaces y tipos base
 │   ├── __init__.py
-│   ├── interfaces.py       # Protocolos para dependencias
-│   └── tipos.py           # Type hints y tipos de datos
+│   ├── interfaces.py       
+# Protocolos para dependencias
+│   └── tipos.py           
+# Type hints y tipos de datos
 │
-├── dominio/                # Entidades y reglas de negocio
+├── dominio/                
+# Entidades y reglas de negocio
 │   ├── __init__.py
-│   ├── recursos.py        # Recurso, GestorRecursos
-│   ├── eventos.py         # Evento, GestorEventos
-│   └── restricciones.py   # Sistema completo de restricciones
+│   ├── recursos.py        
+# Recurso, GestorRecursos
+│   ├── eventos.py         
+# Evento, GestorEventos
+│   └── restricciones.py   
+# Sistema completo de restricciones
 │
-├── aplicacion/            # Casos de uso y lógica
+├── aplicacion/            
+# Casos de uso y lógica
 │   ├── __init__.py
-│   └── planificador.py   # Clase principal Planificador
+│   └── planificador.py   
+# Clase principal Planificador
 │
-├── infraestructura/       # Persistencia y servicios
+├── infraestructura/       
+# Persistencia y servicios
 │   ├── __init__.py
-│   └── persistencia.py   # Guardar/cargar sistema completo
+│   └── persistencia.py   
+# Guardar/cargar sistema completo
 │
-├── datos/                 # Datos del sistema
-│   ├── datos.json # Estado actual (formato nuevo)
+├── datos/                 
+# Datos del sistema
+│   ├── datos.json 
+# Estado actual (formato nuevo)
 │   
-├── app.py                # Interfaz web Streamlit
-├── requirements.txt      # Dependencias
-├── README.md            # Este archivo
-└── backups/          # Backups automáticos
+├── app.py                
+# Interfaz web Streamlit
+├── requirements.txt      
+# Dependencias
+├── README.md            
+# Este archivo
+└── backups/          
+# Backups automáticos
 └── .gitignore
 └──  __init__.py
 ```
@@ -335,25 +353,33 @@ Implementa 3 tipos de restricciones:
 
 aplicacion/planificador.py - Orquestador Principal
 
-class Planificador:
-    def planificar_evento(...)      # Validación completa
-    def verificar_conflictos(...)   # Algoritmo eficiente
-    def buscar_hueco_automático(...) # Búsqueda inteligente
-    def guardar_datos(...)         # Persistencia delegada
+    class Planificador:
+
+        def planificar_evento(...)      
+        # Validación completa
+        def verificar_conflictos(...)    
+        # Algoritmo eficiente
+        def buscar_hueco_automático(...) 
+        # Búsqueda inteligente
+        def guardar_datos(...)        
+        # Persistencia delegada
 
 infraestructura/persistencia.py - Gestor de Estado
 
-class Persistencia:
-    @staticmethod
-    def guardar_sistema(...)    # Guarda TODO el estado
-    @staticmethod  
-    def cargar_sistema(...)     # Carga con referencias intactas
-    @staticmethod
-    def crear_backup(...)       # Backup con timestamp
+    class Persistencia:
+        @staticmethod
+        def guardar_sistema(...)    
+        # Guarda TODO el estado
+        @staticmethod  
+        def cargar_sistema(...)     
+        # Carga con referencias intactas
+        @staticmethod
+        def crear_backup(...)      
+         # Backup con timestamp
 __________________________________________________________________
 **📄 Entregables**
 
-✅ 1. Código Fuente
+1. Código Fuente
 
     -> 13 archivos Python organizados por responsabilidad
 
@@ -363,7 +389,7 @@ __________________________________________________________________
 
     -> Manejo de errores robusto en toda la aplicación
 
-✅ 2. Documentación (README.md)
+2. Documentación (README.md)
 
     -> Dominio elegido y justificación (Centro de Investigación IA)
 
@@ -375,7 +401,7 @@ __________________________________________________________________
 
     -> Explicación de arquitectura y decisiones técnicas
 
-✅ 3. Archivo de Datos de Ejemplo
+3. Archivo de Datos de Ejemplo
 
     -> datos.json - Ejemplo completo funcionamiento
 
@@ -396,36 +422,30 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
 2. Interfaz Gráfica (Streamlit)
 
-    ✅ Dashboard interactivo con métricas en tiempo real
+ Dashboard interactivo con métricas en tiempo real
 
-    ✅ Visualización timeline de eventos por recurso
+ Visualización timeline de eventos por recurso
 
-    ✅ Filtros avanzados combinados (tipo, estado, fecha)
+ Filtros avanzados combinados (tipo, estado, fecha)
 
-    ✅ Formularios inteligentes con validación en tiempo real
+ Formularios inteligentes con validación en tiempo real
 
-    ✅ Sistema de temas personalizado
+ Sistema de temas personalizado
 
 3. Funcionalidades Adicionales
 
-    ✅ Búsqueda de huecos inteligente con algoritmo optimizado
+ Búsqueda de huecos inteligente con algoritmo optimizado
 
-    ✅ Sistema de prioridades (1-5 estrellas) que afecta la planificación
+ Sistema de prioridades (1-5 estrellas) que afecta la planificación
 
-    ✅ Estados de evento (planificado, en curso, completado, cancelado)
+ Estados de evento (planificado, en curso, completado, cancelado)
 
-    ✅ Sistema de backup automático 
+ Sistema de backup automático 
 
 __________________________________________________________________
-    Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
+Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
 
-    # Últimos pasos para comenzar:
-1. git clone https://github.com/RosyFdezT07/IA-Center
-2. pip install -r requirements.txt
-3. streamlit run app.py
-
-
-Desarrollado para el curso de CC 1er año
+Desarrollado para el curso de Ciencias de la Computación 1er año
 Centro de Investigación en IA - Planificador Inteligente de Eventos
 📅 Enero 2026 • 🐍 Python 3.9+ • 🎨 Streamlit
 
