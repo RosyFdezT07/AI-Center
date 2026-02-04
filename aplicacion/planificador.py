@@ -298,7 +298,7 @@ class Planificador:
                                 
                             }
                         }
-            #Avanzar 10 minutos
+            #Avanzar 30 minutos
             tiempo_actual += timedelta(minutes=30)
             
         return {
@@ -429,15 +429,24 @@ class Planificador:
         
         # Intentar cargar con Persistencia
         if os.path.exists(ruta_archivo):
+        
             try:
                 gestor_eventos, gestor_recursos, restricciones = Persistencia.cargar_sistema(ruta_archivo)
                 self.gestor_eventos = gestor_eventos
                 self.gestor_recursos = gestor_recursos
+                
+                # Si no hay restricciones, crear predeterminadas
+                if not restricciones or len(restricciones) == 0:
+                    print("⚠️ No se encontraron restricciones, creando predeterminadas...")
+                    restricciones = crear_restricciones_predeterminadas()
+                
                 self.restricciones = restricciones
-                print(f"Datos cargados desde {archivo}")
+                print(f"✅ Datos cargados desde {archivo} - {len(restricciones)} restricciones")
                 return True
+                
             except Exception as e:
-                print(f"Error al cargar datos con Persistencia: {e}")
+                print(f"❌ Error al cargar datos: {e}")
+                # Continuar con formato antiguo
         
         # Si no existe o falla, intentar cargar formato antiguo para compatibilidad
         archivo_antiguo = "datos.json"

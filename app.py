@@ -186,7 +186,7 @@ st.markdown("""
 # Funciones auxiliares
 
 def initialize_planificador():
-    """Inicializa el planificador sin duplicación de recursos"""
+    """Inicializa el planificador """
     if 'planificador' not in st.session_state:
         # Crear instancia limpia (sin recursos predeterminados automáticos)
         st.session_state.planificador = Planificador()
@@ -199,7 +199,7 @@ def initialize_planificador():
             # Intentar cargar datos existentes
             datos_cargados = st.session_state.planificador.cargar_datos()
             
-            # 3. Si no se cargaron datos, cargar recursos predeterminados
+            # Si no se cargaron datos, cargar recursos predeterminados
             if not datos_cargados:
                 recursos_predeterminados = crear_recursos_predeterminados()
                 for recurso in recursos_predeterminados.recursos.values():
@@ -209,7 +209,7 @@ def initialize_planificador():
                 st.session_state.planificador.guardar_datos()
                 print("✅ Cargados recursos predeterminados y guardados")
             
-            #  Validar que todos los eventos sean objetos válidos
+            # Validar que todos los eventos sean objetos válidos
             eventos_validos = []
             for evento in st.session_state.planificador.gestor_eventos.eventos.values():
                 if isinstance(evento, str):
@@ -231,7 +231,7 @@ def initialize_planificador():
                 
         except Exception as e:
             st.error(f"❌ Error crítico al inicializar: {str(e)}")
-            # Fallback: cargar solo recursos predeterminados
+            # Cargar solo recursos predeterminados
             st.session_state.planificador = Planificador()
             # Limpiar y cargar solo predeterminados
             st.session_state.planificador.gestor_recursos = GestorRecursos()
@@ -493,7 +493,7 @@ def main():
     if 'current_page' not in st.session_state:
         st.session_state.current_page = "dashboard"
     
-    # CALCULAR EVENTOS PRÓXIMOS PARA EL BADGE
+    # Calcular eventos próximos para el badge
     eventos_proximos = planificador.listar_eventos(dias=7)
     num_eventos_proximos = len(eventos_proximos)
     
@@ -504,6 +504,7 @@ def main():
         "recursos": {"icon": "🔧", "label": "Recursos", "badge": ""},
         "nuevo_evento": {"icon": "✨", "label": "Nuevo Evento", "badge": "NEW"},
         "buscar_huecos": {"icon": "🔍", "label": "Buscar Huecos", "badge": ""},
+        "restricciones": {"icon": "⚠️", "label": "Restricciones", "badge": ""},
         "datos": {"icon": "💾", "label": "Gestión de Datos", "badge": ""}
     }
     
@@ -558,7 +559,7 @@ def main():
     """, unsafe_allow_html=True)
     
     # Tarjetas de estadísticas 
-    # Tarjetas de estadísticas - SOLO 2 TARJETAS
+    # Tarjetas de estadísticas - solo dos tarjetas
     recursos_total = len(planificador.listar_recursos())
     eventos_total = len(planificador.gestor_eventos)
 
@@ -669,7 +670,7 @@ def main():
     st.sidebar.caption("© 2025 • Todos los derechos reservados")
     
    
-    # CONTENIDO PRINCIPAL SEGÚN PÁGINA
+    # Contenido principal según página
     
     # Mostrar la página correspondiente
     if st.session_state.current_page == "dashboard":
@@ -682,11 +683,13 @@ def main():
         show_nuevo_evento(planificador)
     elif st.session_state.current_page == "buscar_huecos":
         show_buscar_huecos(planificador)
+    elif st.session_state.current_page == "restricciones":
+        show_restricciones(planificador)
     elif st.session_state.current_page == "datos":
         show_datos(planificador)
 
 
-# SECCIONES DE LA APLICACIÓN
+# Secciones de la aplicación
 
 def show_dashboard(planificador):
     """Dashboard principal"""
@@ -986,16 +989,62 @@ def show_nuevo_evento(planificador):
             prioridad = st.slider("⭐ Prioridad (1-5)", 1, 5, 3)
         
         with col2:
-            fecha = st.date_input("📅 Fecha *", datetime.now())
-            hora_inicio = st.time_input("⏰ Hora de Inicio *", datetime.now().time())
-            duracion_horas = st.number_input("⏱️ Duración (horas) *", 0.5, 24.0, 2.0, 0.5)
+            # Usar key en los controles para que Streamlit maneje el estado automáticamente
+            fecha = st.date_input(
+                "📅 Fecha de inicio *", 
+                datetime.now().date(),
+                key="nuevo_evento_fecha"
+            )
             
-            # Calcular hora de fin
+            hora_inicio = st.time_input(
+                "⏰ Hora de inicio *", 
+                datetime.now().time(),
+                key="nuevo_evento_hora_inicio"
+            )
+            
+            # Fecha y hora de fin
+            col_fecha_fin, col_hora_fin = st.columns(2)
+            
+            with col_fecha_fin:
+                fecha_fin = st.date_input(
+                    "📅 Fecha de fin *", 
+                    datetime.now().date(),
+                    key="nuevo_evento_fecha_fin"
+                )
+            
+            with col_hora_fin:
+                hora_fin = st.time_input(
+                    "⏰ Hora de fin *", 
+                    (datetime.now() + timedelta(hours=2)).time(),
+                    key="nuevo_evento_hora_fin"
+                )
+            
+            # Calcular inicio y fin completos
             inicio = datetime.combine(fecha, hora_inicio)
-            fin = inicio + timedelta(hours=duracion_horas)
+            fin = datetime.combine(fecha_fin, hora_fin)
             
-            st.info(f"**Hora de fin calculada:** {fin.strftime('%H:%M')}")
-            
+            # Calcular duración en horas
+            if inicio and fin:
+                if fin <= inicio:
+                    st.error("❌ La fecha/hora de fin debe ser posterior a la de inicio")
+                else:
+                    duracion_horas = (fin - inicio).total_seconds() / 3600
+                    
+                    # Validar duración máxima (7 días = 168 horas)
+                    if duracion_horas > 168:
+                        st.error("❌ Los eventos no pueden durar más de 7 días (168 horas)")
+                        duracion_horas = 168  # Limitar para mostrar correctamente
+                    
+                    # Mostrar información de duración
+                    if duracion_horas >= 24:
+                        dias = int(duracion_horas // 24)
+                        horas_resto = duracion_horas % 24
+                        duracion_str = f"{dias} días y {horas_resto:.1f} horas"
+                    else:
+                        duracion_str = f"{duracion_horas:.1f} horas"
+                    
+                    
+                    
             # Calcular estado automático
             ahora = datetime.now()
             if inicio > ahora:
@@ -1057,12 +1106,10 @@ def show_nuevo_evento(planificador):
         st.markdown("<div class='separator'></div>", unsafe_allow_html=True)
         st.subheader("⚙️ Opciones Avanzadas")
         
-        col_adv1, col_adv2 = st.columns(2)
-        with col_adv1:
+        cols_avanzadas = st.columns(2)  # Guardar la lista
+
+        with cols_avanzadas[0].container():  # Primera columna
             buscar_hueco = st.checkbox("🔍 Buscar hueco automáticamente si ocupado", True)
-        with col_adv2:
-            if st.checkbox("📋 Ver validación previa"):
-                st.info("La validación se realizará al enviar el formulario")
         
         # Botón de envío
         submitted = st.form_submit_button("🚀 Planificar Evento", use_container_width=True)
@@ -1098,11 +1145,24 @@ def show_nuevo_evento(planificador):
             """)
         
         with col_sum2:
+            if duracion_horas >= 24:
+                dias = int(duracion_horas // 24)
+                horas_resto = duracion_horas % 24
+                duracion_str = f"{dias} días y {horas_resto:.1f} horas"
+            else:
+                duracion_str = f"{duracion_horas} horas"
+            
+            # Formatear fecha de fin
+            if duracion_horas >= 24:
+                fin_str = fin.strftime('%d/%m/%Y %H:%M')
+            else:
+                fin_str = fin.strftime('%H:%M')
+            
             st.markdown(f"""
             **Fecha:** {fecha}
             **Inicio:** {hora_inicio}
-            **Fin:** {fin.strftime('%H:%M')}
-            **Duración:** {duracion_horas} horas
+            **Fin:** {fin_str}
+            **Duración:** {duracion_str}
             **Estado inicial:** {estado_automatico.upper()}
             """)
         
@@ -1131,30 +1191,52 @@ def show_nuevo_evento(planificador):
                 return
         
         if resultado["success"]:
-            st.success(f"✅ {resultado['message']}")
-            st.session_state.evento_planificado = True
+            detalles = resultado.get('detalles', {})
+            inicio_original = detalles.get('inicio_original')
+            inicio_asignado = detalles.get('inicio_asignado')
             
-            # Guardar tras crear evento
-            planificador.guardar_datos()
-            
+            # Comparar fechas directamente
+            if inicio_original and inicio_asignado and inicio_original != inicio_asignado:
+                # Evento replanificado
+                st.warning("⚠️ **¡Atención! El evento fue movido a otro horario**")
+                
+                st.markdown(f"""
+                | | Original (Solicitado) | Asignado (Real) |
+                |-|-----------------------|-----------------|
+                | **Fecha** | {inicio_original.strftime('%d/%m/%Y')} | {inicio_asignado.strftime('%d/%m/%Y')} |
+                | **Hora** | {inicio_original.strftime('%H:%M')} | {inicio_asignado.strftime('%H:%M')} |
+                | **Estado** | ❌ No disponible | ✅ Planificado |
+                """)
+                
+                st.info(f"💡 **Razón:** Recursos ocupados en el horario original")
+                
+            else:
+                # Evento en fecha original
+                st.success("✅ Evento planificado en la fecha solicitada")
+                if resultado.get("evento"):
+                    e = resultado["evento"]
+                    st.markdown(f"**Fecha real:** {e.inicio.strftime('%d/%m/%Y %H:%M')}")
+                    st.success(f"✅ {resultado['message']}")
+                    st.session_state.evento_planificado = True
+                    
+                    # Guardar tras crear evento
+                    planificador.guardar_datos()
+                    
+                    # Botones adicionales si se creó un evento
+            if st.session_state.get('evento_planificado'):
+                st.markdown("<div class='separator'></div>", unsafe_allow_html=True)
+                col_btn2, = st.columns(1)
+                with col_btn2:
+                    if st.button("➕ Crear Otro Evento", use_container_width=True):
+                        st.session_state.evento_planificado = None
+                        st.rerun()
+                    
         else:
             error_message = resultado.get('message', 'Error desconocido')
             st.error(f"❌ {error_message}")
             st.session_state.evento_planificado = False
-    
-    # Botones adicionales si se creó un evento
-    if st.session_state.get('evento_planificado'):
-        st.markdown("<div class='separator'></div>", unsafe_allow_html=True)
-        col_btn1, col_btn2 = st.columns(2)
-        with col_btn1:
-            if st.button("👁️ Ver Evento Creado", use_container_width=True):
-                st.session_state.current_page = "eventos"
-                st.session_state.evento_planificado = None
-                st.rerun()
-        with col_btn2:
-            if st.button("➕ Crear Otro Evento", use_container_width=True):
-                st.session_state.evento_planificado = None
-                st.rerun()
+            
+            
 
 def show_buscar_huecos(planificador):
     """Búsqueda de huecos disponibles"""
@@ -1167,6 +1249,10 @@ def show_buscar_huecos(planificador):
     # Inicializar estado para resultados
     if 'huecos_encontrados' not in st.session_state:
         st.session_state.huecos_encontrados = None
+    
+    # Inicializar la hora de inicio en el estado de sesión si no existe
+    if 'hora_inicio_busqueda' not in st.session_state:
+        st.session_state.hora_inicio_busqueda = datetime.now().time()
     
     # Formulario principal
     with st.form("buscar_huecos_form"):
@@ -1210,7 +1296,14 @@ def show_buscar_huecos(planificador):
             dias_busqueda = st.slider("📅 Días a buscar", 1, 30, 7)
         
         with col_params3:
-            hora_inicio_min = st.time_input("⏰ Buscar a partir de", datetime.now().time())
+            # Usar la hora guardada en el estado de sesión
+            hora_inicio_min = st.time_input(
+                "⏰ Buscar a partir de", 
+                value=st.session_state.hora_inicio_busqueda,
+                key="hora_inicio_busqueda_input"
+            )
+            # Actualizar el estado de sesión con la nueva selección
+            st.session_state.hora_inicio_busqueda = hora_inicio_min
         
         # Botón de búsqueda
         submitted = st.form_submit_button("🔎 Buscar Huecos", use_container_width=True)
@@ -1225,12 +1318,17 @@ def show_buscar_huecos(planificador):
         with st.spinner(f"🔍 Buscando huecos para {len(recursos_ids)} recursos..."):
             inicio_busqueda = datetime.combine(datetime.now().date(), hora_inicio_min)
             
+            # Si la hora seleccionada ya pasó hoy, usar la hora seleccionada para mañana
+            if inicio_busqueda < datetime.now():
+                inicio_busqueda += timedelta(days=1)
+            
             # Llamar al método de búsqueda
             try:
                 huecos = planificador.buscar_hueco_disponible(
                     recursos_ids=recursos_ids,
                     duracion_horas=duracion_horas,
-                    inicio_busqueda=inicio_busqueda
+                    inicio_busqueda=inicio_busqueda,
+                    dias=dias_busqueda
                 )
             except Exception as e:
                 st.error(f"❌ Error al buscar huecos: {str(e)}")
@@ -1243,21 +1341,6 @@ def show_buscar_huecos(planificador):
         huecos = st.session_state.huecos_encontrados
         
         if huecos:
-            st.success(f"✅ Encontrados {len(huecos)} huecos disponibles")
-            
-            # Mostrar en tabla
-            huecos_data = []
-            for i, hueco in enumerate(huecos[:20]):  # Limitar a 20 resultados
-                huecos_data.append({
-                    "Hueco": i + 1,
-                    "Inicio": hueco['inicio'].strftime('%d/%m %H:%M'),
-                    "Fin": hueco['fin'].strftime('%H:%M'),
-                    "Duración (h)": hueco['duracion_horas']
-                })
-            
-            df = pd.DataFrame(huecos_data)
-            st.dataframe(df, use_container_width=True)
-            
             # Visualización gráfica
             st.subheader("📊 Visualización de Huecos")
             
@@ -1276,7 +1359,7 @@ def show_buscar_huecos(planificador):
                     x_start="Inicio",
                     x_end="Fin",
                     y="Recursos",
-                    title="Huecos Disponibles (Próximas 48 horas)",
+                    title="Huecos Disponibles (Próximos 10)",
                     color_discrete_sequence=['#00D4FF']
                 )
                 fig.update_layout(
@@ -1306,12 +1389,232 @@ def show_buscar_huecos(planificador):
             st.markdown("- Menos recursos seleccionados")
             st.markdown("- Duración más corta")
             st.markdown("- Ampliar el rango de búsqueda")
+            
+def show_restricciones(planificador):
+    """Página explicativa de restricciones del sistema"""
+    st.title("🪄 Restricciones del Sistema")
+    
+    st.markdown("""
+    ## 🔮 Introducción a las Restricciones
+    
+    El **Planificador Inteligente de Eventos** implementa un sistema de restricciones para garantizar 
+    que los eventos sean viables, seguros y eficientes. Estas reglas automatizadas evitan 
+    conflictos y aseguran el uso óptimo de los recursos.
+    
+    🌟 **Importante**: Todas estas restricciones se validan automáticamente al planificar cualquier evento.
+    """)
+    
+    # Mostrar estadísticas rápidas
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Total Restricciones", len(planificador.restricciones))
+    with col2:
+        tipos = set([type(r).__name__ for r in planificador.restricciones])
+        st.metric("Tipos Diferentes", len(tipos))
+    with col3:
+        recursos_afectados = set()
+        for r in planificador.restricciones:
+            if hasattr(r, 'principal'):
+                recursos_afectados.add(r.principal)
+            if hasattr(r, 'requerido'):
+                recursos_afectados.add(r.requerido)
+        st.metric("Recursos Afectados", len(recursos_afectados))
+    
+    st.markdown("---")
+    
+    # Importar tipos de restricciones para categorizar
+    from dominio.restricciones import (
+        RestriccionCoRequisito, 
+        RestriccionExclusionMutua, 
+        RestriccionCapacidad
+    )
+    
+    # Separar restricciones por tipo
+    co_requisitos = [r for r in planificador.restricciones if isinstance(r, RestriccionCoRequisito)]
+    exclusiones = [r for r in planificador.restricciones if isinstance(r, RestriccionExclusionMutua)]
+    capacidades = [r for r in planificador.restricciones if isinstance(r, RestriccionCapacidad)]
+    
+    # TAB 1: Co-requisitos
+    with st.expander("🔗 **Restricciones de Co-requisito**", expanded=True):
+        st.markdown("""
+        ### ¿Qué son los co-requisitos?
+        **Un recurso requiere la presencia obligatoria de otro recurso** para poder ser utilizado.
+        
+        ⚠️ **Regla**: Si usas el recurso A, **DEBES** usar también el recurso B.
+        
+        ### Ejemplos en este sistema:
+        """)
+        
+        if co_requisitos:
+            for i, restriccion in enumerate(co_requisitos, 1):
+                # Obtener nombres de recursos
+                recurso_principal = planificador.gestor_recursos.obtener_recurso(restriccion.principal)
+                recurso_requerido = planificador.gestor_recursos.obtener_recurso(restriccion.requerido)
+                
+                nombre_principal = recurso_principal.nombre if recurso_principal else restriccion.principal
+                nombre_requerido = recurso_requerido.nombre if recurso_requerido else restriccion.requerido
+                
+                st.markdown(f"""
+                **{i}. {nombre_principal}** 
+                -  **Requiere obligatoriamente**: {nombre_requerido}
+                -  **Razón**: {obtener_razon_co_requisito(restriccion.principal, restriccion.requerido)}
+                """)
+        else:
+            st.info("No hay restricciones de co-requisito configuradas.")
+    
+    # TAB 2: Exclusiones mutuas
+    with st.expander("🚫 **Restricciones de Exclusión Mutua**", expanded=True):
+        st.markdown("""
+        ### ¿Qué son las exclusiones mutuas?
+        **Dos recursos no pueden usarse juntos** en el mismo evento.
+        
+        ⚠️ **Regla**: Si usas el recurso A, **NO PUEDES** usar el recurso B en el mismo evento.
+        
+        ### Ejemplos en este sistema:
+        """)
+        
+        if exclusiones:
+            for i, restriccion in enumerate(exclusiones, 1):
+                recurso_a = planificador.gestor_recursos.obtener_recurso(restriccion.recurso_a)
+                recurso_b = planificador.gestor_recursos.obtener_recurso(restriccion.recurso_b)
+                
+                nombre_a = recurso_a.nombre if recurso_a else restriccion.recurso_a
+                nombre_b = recurso_b.nombre if recurso_b else restriccion.recurso_b
+                
+                st.markdown(f"""
+                **{i}. {nombre_a}** 
+                -  **No puede usarse con**: {nombre_b}
+                -  **Razón**: {obtener_razon_exclusion(restriccion.recurso_a, restriccion.recurso_b)}
+                """)
+        else:
+            st.info("No hay restricciones de exclusión mutua configuradas.")
+    
+    # TAB 3: Capacidades
+    with st.expander("🎚️ **Restricciones de Capacidad**", expanded=True):
+        st.markdown("""
+        ### ¿Qué son las restricciones de capacidad?
+        **Límite máximo de recursos del mismo tipo** que pueden usarse en un evento.
+        
+        ⚠️ **Regla**: No puedes usar más de X recursos del tipo Y en un mismo evento.
+        
+        ### Límites actuales:
+        """)
+        
+        if capacidades:
+            for i, restriccion in enumerate(capacidades, 1):
+                st.markdown(f"""
+                **{i}. Recursos de tipo `{restriccion.tipo_recurso}`**
+                -  **Límite máximo**: {restriccion.capacidad_maxima} por evento
+                -  **Ejemplo**: No puedes tener más de {restriccion.capacidad_maxima} recursos humanos en un evento
+                """)
+        else:
+            st.info("No hay restricciones de capacidad configuradas.")
+    
+    # Consejos para el usuario
+    st.markdown("---")
+    
+    with st.container():
+        st.subheader("💡 Consejos para el Usuario")
+        
+        col_tip1, col_tip2, col_tip3 = st.columns(3)
+        
+        with col_tip1:
+            st.markdown("""
+            ### ✅ Al planificar:
+            1. Verifica las restricciones de co-requisito
+            2. Selecciona recursos compatibles
+            3. Respeta los límites de capacidad
+            """)
+        
+        with col_tip2:
+            st.markdown("""
+            ### 🔍 Si hay error:
+            1. Lee el mensaje de error detenidamente
+            2. Revisa las restricciones aquí
+            3. Modifica la selección de recursos
+            """)
+        
+        with col_tip3:
+            st.markdown("""
+            ### ⚡ Mejores prácticas:
+            1. Usa "Buscar Huecos" automático
+            2. Planifica con anticipación
+            3. Consulta esta página regularmente
+            """)
+    
+    # Casos de ejemplo
+    st.markdown("---")
+    
+    with st.expander("📖 **Casos de Ejemplo Prácticos**"):
+        st.markdown("""
+        ### Caso 1: Entrenamiento de IA
+        
+        **Recursos seleccionados:**
+        - Cluster GPU A100 ✅
+        - Investigador Visión ✅
+        - Científico de Datos ✅
+        - Laboratorio de Datos ✅
+        
+        **Resultado:** ✅ **APROBADO** 
+        *Cumple todas las restricciones*
+        
+        ---
+        
+        ### Caso 2: Configuración incompatible
+        
+        **Recursos seleccionados:**
+        - Laboratorio de Datos Sensibles ✅
+        - Servidor Externo (AWS) ❌
+        
+        **Resultado:** ❌ **RECHAZADO**
+        *Violación: Laboratorio de datos + Servidor externo (exclusión mutua)*
+        
+        ---
+        
+        ### Caso 3: Exceso de capacidad
+        
+        **Recursos seleccionados:**
+        - 5 Investigadores Humanos ❌
+        - Cluster GPU V100 ✅
+        
+        **Resultado:** ❌ **RECHAZADO**
+        *Violación: Máximo 4 recursos humanos por evento*
+        """)
+    
+    # Pie de página
+    st.markdown("---")
+    st.caption("ℹ️ *Estas restricciones están definidas en `dominio/restricciones.py` y pueden personalizarse*")
+
+# Funciones auxiliares para obtener razones
+def obtener_razon_co_requisito(id_principal, id_requerido):
+    """Devuelve la razón de un co-requisito"""
+    razones = {
+        ("cluster_gpu_a100", "investigador_vision"): 
+            "Seguridad y supervisión técnica especializada requerida para operar equipos de alto valor.",
+        ("lab_datos_sensibles", "cientifico_datos"): 
+            "Protección de datos sensibles requiere personal autorizado y capacitado.",
+        ("sala_servidores", "ingeniero_mlops"): 
+            "Acceso a infraestructura crítica requiere supervisión de ingeniería especializada."
+    }
+    return razones.get((id_principal, id_requerido), "Razón de seguridad o funcionalidad.")
+
+def obtener_razon_exclusion(id_a, id_b):
+    """Devuelve la razón de una exclusión mutua"""
+    razones = {
+        ("lab_datos_sensibles", "servidor_externo"): 
+            "Política de seguridad: datos sensibles no pueden salir del laboratorio físico.",
+        ("cluster_gpu_a100", "cluster_gpu_v100"): 
+            "Limitación de energía y refrigeración del centro de datos.",
+        ("sala_servidores", "lab_prototipado"): 
+            "Interferencia electromagnética con equipos sensibles de medición."
+    }
+    return razones.get((id_a, id_b), razones.get((id_b, id_a), "Incompatibilidad técnica o de seguridad."))
 
 def show_datos(planificador):
     """Gestión de datos y persistencia"""
     st.title("💾 Gestión de Datos")
     
-    # SOLO 2 PESTAÑAS AHORA (eliminadas "Sistema" y "Análisis")
+    # Dos pestañas
     tab1, tab2 = st.tabs(["📁 Guardar/Cargar", "🗑️ Limpieza"])
     
     with tab1:
@@ -1359,7 +1662,7 @@ def show_datos(planificador):
             except Exception as e:
                 st.error(f"❌ Error al crear backup: {e}")
     
-    # Pestaña 2 (antes era la 4)
+    # Pestaña 2 
     with tab2:
         st.subheader("🗑️ Limpieza de Eventos")
         
@@ -1388,6 +1691,8 @@ def show_datos(planificador):
                         st.rerun()
                     else:
                         st.info("ℹ️ No hay eventos para eliminar con estos criterios")
+                        
+
 
 # EJECUCIÓN DE LA APLICACIÓN
 
