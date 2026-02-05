@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "fecha_guardado": "2026-02-03T18:26:18.726517",
+    "fecha_guardado": "2026-02-04T22:06:56.384846",
     "version": "1.0",
-    "total_eventos": 1,
+    "total_eventos": 4,
     "total_recursos": 14,
     "total_restricciones": 10
   },
@@ -40,6 +40,129 @@
               "Transformers",
               "HuggingFace",
               "spaCy"
+            ]
+          }
+        },
+        {
+          "id": "cluster_gpu_a100",
+          "nombre": "Cluster GPU A100 (8x NVIDIA A100)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "memoria_gpu": "320GB",
+            "procesadores": "2x AMD EPYC",
+            "ram": "512GB",
+            "almacenamiento": "50TB NVMe",
+            "consumo_energia": "6.5kW"
+          }
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "",
+      "estado": "completado",
+      "prioridad": 3,
+      "metadata": {}
+    },
+    {
+      "id": "evento_5696ac00",
+      "nombre": "Machine Learning",
+      "inicio": "2026-02-04T20:43:00",
+      "fin": "2026-02-04T21:00:00",
+      "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Investigador Senior - Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision",
+            "experiencia": "5+ años",
+            "certificaciones": [
+              "PyTorch",
+              "OpenCV",
+              "TensorFlow"
+            ]
+          }
+        },
+        {
+          "id": "cluster_gpu_a100",
+          "nombre": "Cluster GPU A100 (8x NVIDIA A100)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "memoria_gpu": "320GB",
+            "procesadores": "2x AMD EPYC",
+            "ram": "512GB",
+            "almacenamiento": "50TB NVMe",
+            "consumo_energia": "6.5kW"
+          }
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "",
+      "estado": "completado",
+      "prioridad": 3,
+      "metadata": {}
+    },
+    {
+      "id": "evento_3d38e7ef",
+      "nombre": "Machine Learning",
+      "inicio": "2026-02-04T21:50:00",
+      "fin": "2026-02-04T22:00:00",
+      "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Investigador Senior - Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision",
+            "experiencia": "5+ años",
+            "certificaciones": [
+              "PyTorch",
+              "OpenCV",
+              "TensorFlow"
+            ]
+          }
+        },
+        {
+          "id": "cluster_gpu_a100",
+          "nombre": "Cluster GPU A100 (8x NVIDIA A100)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "memoria_gpu": "320GB",
+            "procesadores": "2x AMD EPYC",
+            "ram": "512GB",
+            "almacenamiento": "50TB NVMe",
+            "consumo_energia": "6.5kW"
+          }
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "",
+      "estado": "completado",
+      "prioridad": 3,
+      "metadata": {}
+    },
+    {
+      "id": "evento_f3a01984",
+      "nombre": "Entrenamiento de Modelo LLM",
+      "inicio": "2026-02-04T22:05:00",
+      "fin": "2026-02-04T22:15:00",
+      "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Investigador Senior - Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision",
+            "experiencia": "5+ años",
+            "certificaciones": [
+              "PyTorch",
+              "OpenCV",
+              "TensorFlow"
             ]
           }
         },
@@ -130,7 +253,7 @@
     {
       "id": "robot_aprendizaje",
       "nombre": "Robot de Aprendizaje por Refuerzo",
-      "tipo": "equipo",
+      "tipo": "computacional",
       "capacidad": 1,
       "atributos": {
         "tipo": "Manipulador 6DOF",

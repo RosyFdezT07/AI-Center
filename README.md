@@ -279,6 +279,11 @@ Alertas: Conflictos inminentes, recursos sobreutilizados
 
 • Estadísticas
 
+5. 💾 Gestión de Datos
+• Guardar/cargar estado del sistema
+• Sistema de backup automático
+• Limpieza de eventos antiguos
+
 *Flujo de Trabajo Típico*
 
 Investigador necesita recursos específicos

@@ -26,7 +26,7 @@ class Recurso:
         if self.capacidad < 1:
             raise ValueError("La capacidad debe de ser al menos uno")
 
-    @classmethod #decorador que se utiliza para operar en la clase
+    @classmethod # Decorador que se utiliza para operar en la clase
     def from_dict(cls, data: Dict[str, Any]) -> "Recurso":
         """Crea una instancia de Recurso desde diccionario"""
         return cls( 
@@ -38,7 +38,7 @@ class Recurso:
         )
     def to_dict(self) ->Dict[str, Any]:
         """Convierte el recurso a diccionario para serialización"""
-        #Serialización :Guardar los objetos para ser utilizados después
+        # Serialización :Guardar los objetos para ser utilizados después
         return {
             'id': self.id,
             'nombre': self.nombre,
@@ -49,7 +49,7 @@ class Recurso:
     
     def es_compatible_con(self, other: 'Recurso') ->bool:
         """Verifica si este recurso es compatible con otro para restricciones"""
-        #Lógica básica de compatibilidad(puede extenderse)
+        # Lógica básica de compatibilidad (puede extenderse)
         if self.tipo == "computacional" and other.tipo == "humano":
             return True
         return False  
@@ -85,7 +85,7 @@ class GestorRecursos:
         self.recursos[recurso.id] = recurso
         return True
     
-    def obtener_recurso(self, id_recurso:str) ->Optional[Recurso]:#Puede devolver None
+    def obtener_recurso(self, id_recurso:str) ->Optional[Recurso]:# Puede devolver None
         """Obtiene un recurso por ID""" 
         return self.recursos.get(id_recurso)
     
@@ -94,7 +94,7 @@ class GestorRecursos:
         return[ r for r in self.recursos.values() if r.tipo == tipo]
     
     def buscar_por_nombre(self, nombre:str) ->List[Recurso]:
-        """Obtiene los recursos por nombre(Búsqueda parcial)"""
+        """Obtiene los recursos por nombre (Búsqueda parcial)"""
         nombre_lower = nombre.lower()
         return [ r for r in self.recursos.values() if nombre_lower in r.nombre.lower()]
     
@@ -166,7 +166,7 @@ def crear_recursos_predeterminados() -> GestorRecursos:
             "acceso": "VPN exclusiva"
         }),
 
-        Recurso("robot_aprendizaje", "Robot de Aprendizaje por Refuerzo", "equipo", 1, {
+        Recurso("robot_aprendizaje", "Robot de Aprendizaje por Refuerzo", "computacional", 1, {
             "tipo": "Manipulador 6DOF",
             "sensores": ["RGB-D", "LiDAR", "Táctiles"],
             "controlador": "NVIDIA Jetson AGX",

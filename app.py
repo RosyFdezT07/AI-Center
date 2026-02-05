@@ -281,7 +281,7 @@ def limpiar_eventos_pasados(planificador, dias_retencion=30):
     eventos_eliminados = 0
     
     # Obtener copia de la lista para evitar problemas al iterar
-    eventos_a_revisar = list(planificador.gestor_eventos.eventos)
+    eventos_a_revisar = list(planificador.gestor_eventos.eventos.values())
     
     for evento in eventos_a_revisar:
         if evento.fin < fecha_limite and evento.estado != 'cancelado':
@@ -504,7 +504,6 @@ def main():
         "recursos": {"icon": "🔧", "label": "Recursos", "badge": ""},
         "nuevo_evento": {"icon": "✨", "label": "Nuevo Evento", "badge": "NEW"},
         "buscar_huecos": {"icon": "🔍", "label": "Buscar Huecos", "badge": ""},
-        "restricciones": {"icon": "⚠️", "label": "Restricciones", "badge": ""},
         "datos": {"icon": "💾", "label": "Gestión de Datos", "badge": ""}
     }
     
@@ -683,8 +682,6 @@ def main():
         show_nuevo_evento(planificador)
     elif st.session_state.current_page == "buscar_huecos":
         show_buscar_huecos(planificador)
-    elif st.session_state.current_page == "restricciones":
-        show_restricciones(planificador)
     elif st.session_state.current_page == "datos":
         show_datos(planificador)
 
@@ -1390,226 +1387,6 @@ def show_buscar_huecos(planificador):
             st.markdown("- Duración más corta")
             st.markdown("- Ampliar el rango de búsqueda")
             
-def show_restricciones(planificador):
-    """Página explicativa de restricciones del sistema"""
-    st.title("🪄 Restricciones del Sistema")
-    
-    st.markdown("""
-    ## 🔮 Introducción a las Restricciones
-    
-    El **Planificador Inteligente de Eventos** implementa un sistema de restricciones para garantizar 
-    que los eventos sean viables, seguros y eficientes. Estas reglas automatizadas evitan 
-    conflictos y aseguran el uso óptimo de los recursos.
-    
-    🌟 **Importante**: Todas estas restricciones se validan automáticamente al planificar cualquier evento.
-    """)
-    
-    # Mostrar estadísticas rápidas
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.metric("Total Restricciones", len(planificador.restricciones))
-    with col2:
-        tipos = set([type(r).__name__ for r in planificador.restricciones])
-        st.metric("Tipos Diferentes", len(tipos))
-    with col3:
-        recursos_afectados = set()
-        for r in planificador.restricciones:
-            if hasattr(r, 'principal'):
-                recursos_afectados.add(r.principal)
-            if hasattr(r, 'requerido'):
-                recursos_afectados.add(r.requerido)
-        st.metric("Recursos Afectados", len(recursos_afectados))
-    
-    st.markdown("---")
-    
-    # Importar tipos de restricciones para categorizar
-    from dominio.restricciones import (
-        RestriccionCoRequisito, 
-        RestriccionExclusionMutua, 
-        RestriccionCapacidad
-    )
-    
-    # Separar restricciones por tipo
-    co_requisitos = [r for r in planificador.restricciones if isinstance(r, RestriccionCoRequisito)]
-    exclusiones = [r for r in planificador.restricciones if isinstance(r, RestriccionExclusionMutua)]
-    capacidades = [r for r in planificador.restricciones if isinstance(r, RestriccionCapacidad)]
-    
-    # TAB 1: Co-requisitos
-    with st.expander("🔗 **Restricciones de Co-requisito**", expanded=True):
-        st.markdown("""
-        ### ¿Qué son los co-requisitos?
-        **Un recurso requiere la presencia obligatoria de otro recurso** para poder ser utilizado.
-        
-        ⚠️ **Regla**: Si usas el recurso A, **DEBES** usar también el recurso B.
-        
-        ### Ejemplos en este sistema:
-        """)
-        
-        if co_requisitos:
-            for i, restriccion in enumerate(co_requisitos, 1):
-                # Obtener nombres de recursos
-                recurso_principal = planificador.gestor_recursos.obtener_recurso(restriccion.principal)
-                recurso_requerido = planificador.gestor_recursos.obtener_recurso(restriccion.requerido)
-                
-                nombre_principal = recurso_principal.nombre if recurso_principal else restriccion.principal
-                nombre_requerido = recurso_requerido.nombre if recurso_requerido else restriccion.requerido
-                
-                st.markdown(f"""
-                **{i}. {nombre_principal}** 
-                -  **Requiere obligatoriamente**: {nombre_requerido}
-                -  **Razón**: {obtener_razon_co_requisito(restriccion.principal, restriccion.requerido)}
-                """)
-        else:
-            st.info("No hay restricciones de co-requisito configuradas.")
-    
-    # TAB 2: Exclusiones mutuas
-    with st.expander("🚫 **Restricciones de Exclusión Mutua**", expanded=True):
-        st.markdown("""
-        ### ¿Qué son las exclusiones mutuas?
-        **Dos recursos no pueden usarse juntos** en el mismo evento.
-        
-        ⚠️ **Regla**: Si usas el recurso A, **NO PUEDES** usar el recurso B en el mismo evento.
-        
-        ### Ejemplos en este sistema:
-        """)
-        
-        if exclusiones:
-            for i, restriccion in enumerate(exclusiones, 1):
-                recurso_a = planificador.gestor_recursos.obtener_recurso(restriccion.recurso_a)
-                recurso_b = planificador.gestor_recursos.obtener_recurso(restriccion.recurso_b)
-                
-                nombre_a = recurso_a.nombre if recurso_a else restriccion.recurso_a
-                nombre_b = recurso_b.nombre if recurso_b else restriccion.recurso_b
-                
-                st.markdown(f"""
-                **{i}. {nombre_a}** 
-                -  **No puede usarse con**: {nombre_b}
-                -  **Razón**: {obtener_razon_exclusion(restriccion.recurso_a, restriccion.recurso_b)}
-                """)
-        else:
-            st.info("No hay restricciones de exclusión mutua configuradas.")
-    
-    # TAB 3: Capacidades
-    with st.expander("🎚️ **Restricciones de Capacidad**", expanded=True):
-        st.markdown("""
-        ### ¿Qué son las restricciones de capacidad?
-        **Límite máximo de recursos del mismo tipo** que pueden usarse en un evento.
-        
-        ⚠️ **Regla**: No puedes usar más de X recursos del tipo Y en un mismo evento.
-        
-        ### Límites actuales:
-        """)
-        
-        if capacidades:
-            for i, restriccion in enumerate(capacidades, 1):
-                st.markdown(f"""
-                **{i}. Recursos de tipo `{restriccion.tipo_recurso}`**
-                -  **Límite máximo**: {restriccion.capacidad_maxima} por evento
-                -  **Ejemplo**: No puedes tener más de {restriccion.capacidad_maxima} recursos humanos en un evento
-                """)
-        else:
-            st.info("No hay restricciones de capacidad configuradas.")
-    
-    # Consejos para el usuario
-    st.markdown("---")
-    
-    with st.container():
-        st.subheader("💡 Consejos para el Usuario")
-        
-        col_tip1, col_tip2, col_tip3 = st.columns(3)
-        
-        with col_tip1:
-            st.markdown("""
-            ### ✅ Al planificar:
-            1. Verifica las restricciones de co-requisito
-            2. Selecciona recursos compatibles
-            3. Respeta los límites de capacidad
-            """)
-        
-        with col_tip2:
-            st.markdown("""
-            ### 🔍 Si hay error:
-            1. Lee el mensaje de error detenidamente
-            2. Revisa las restricciones aquí
-            3. Modifica la selección de recursos
-            """)
-        
-        with col_tip3:
-            st.markdown("""
-            ### ⚡ Mejores prácticas:
-            1. Usa "Buscar Huecos" automático
-            2. Planifica con anticipación
-            3. Consulta esta página regularmente
-            """)
-    
-    # Casos de ejemplo
-    st.markdown("---")
-    
-    with st.expander("📖 **Casos de Ejemplo Prácticos**"):
-        st.markdown("""
-        ### Caso 1: Entrenamiento de IA
-        
-        **Recursos seleccionados:**
-        - Cluster GPU A100 ✅
-        - Investigador Visión ✅
-        - Científico de Datos ✅
-        - Laboratorio de Datos ✅
-        
-        **Resultado:** ✅ **APROBADO** 
-        *Cumple todas las restricciones*
-        
-        ---
-        
-        ### Caso 2: Configuración incompatible
-        
-        **Recursos seleccionados:**
-        - Laboratorio de Datos Sensibles ✅
-        - Servidor Externo (AWS) ❌
-        
-        **Resultado:** ❌ **RECHAZADO**
-        *Violación: Laboratorio de datos + Servidor externo (exclusión mutua)*
-        
-        ---
-        
-        ### Caso 3: Exceso de capacidad
-        
-        **Recursos seleccionados:**
-        - 5 Investigadores Humanos ❌
-        - Cluster GPU V100 ✅
-        
-        **Resultado:** ❌ **RECHAZADO**
-        *Violación: Máximo 4 recursos humanos por evento*
-        """)
-    
-    # Pie de página
-    st.markdown("---")
-    st.caption("ℹ️ *Estas restricciones están definidas en `dominio/restricciones.py` y pueden personalizarse*")
-
-# Funciones auxiliares para obtener razones
-def obtener_razon_co_requisito(id_principal, id_requerido):
-    """Devuelve la razón de un co-requisito"""
-    razones = {
-        ("cluster_gpu_a100", "investigador_vision"): 
-            "Seguridad y supervisión técnica especializada requerida para operar equipos de alto valor.",
-        ("lab_datos_sensibles", "cientifico_datos"): 
-            "Protección de datos sensibles requiere personal autorizado y capacitado.",
-        ("sala_servidores", "ingeniero_mlops"): 
-            "Acceso a infraestructura crítica requiere supervisión de ingeniería especializada."
-    }
-    return razones.get((id_principal, id_requerido), "Razón de seguridad o funcionalidad.")
-
-def obtener_razon_exclusion(id_a, id_b):
-    """Devuelve la razón de una exclusión mutua"""
-    razones = {
-        ("lab_datos_sensibles", "servidor_externo"): 
-            "Política de seguridad: datos sensibles no pueden salir del laboratorio físico.",
-        ("cluster_gpu_a100", "cluster_gpu_v100"): 
-            "Limitación de energía y refrigeración del centro de datos.",
-        ("sala_servidores", "lab_prototipado"): 
-            "Interferencia electromagnética con equipos sensibles de medición."
-    }
-    return razones.get((id_a, id_b), razones.get((id_b, id_a), "Incompatibilidad técnica o de seguridad."))
-
 def show_datos(planificador):
     """Gestión de datos y persistencia"""
     st.title("💾 Gestión de Datos")
