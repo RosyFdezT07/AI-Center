@@ -487,7 +487,7 @@ class Planificador:
         print(" Cargados recursos predeterminados (sin datos previos)")
         return False
         
-    def guardar_datos(self, archivo: str = "datos_sistema.json") -> bool:
+    def guardar_datos(self, archivo: str = "datos.json") -> bool:
         """
         Guardar los datos usando la clase Persistencia
         """

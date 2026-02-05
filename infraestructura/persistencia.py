@@ -22,7 +22,7 @@ class Persistencia:
      
     @staticmethod #La siguiente función no recibe parámetro(clase, instancia)
     def guardar_sistema( gestor_eventos: GestorEventos, gestor_recursos: GestorRecursos,
-                        restricciones: List[Restriccion], archivo: str = "datos_sistema.json"):
+                        restricciones: List[Restriccion], archivo: str = "datos.json"):
     # archivo:es la ruta completa donde se encuentran los datos del sistema
         datos ={
             "metadata": { 
@@ -46,7 +46,7 @@ class Persistencia:
             json.dump(datos, f, indent = 2, ensure_ascii = False, default = str)
     
     @staticmethod
-    def cargar_sistema(archivo: str = "datos_sistema.json") -> tuple:
+    def cargar_sistema(archivo: str = "datos.json") -> tuple:
         """Permite cargar los datos del sistema"""
         """
         Returns: tuple: (gestor_eventos, gestor_recursos, restricciones)
@@ -77,7 +77,7 @@ class Persistencia:
         #cargar eventos (depende de recursos)
         gestor_eventos = GestorEventos()
         for evento_data in datos.get("eventos", []):
-            recursos_evento = []
+            recursos_evento = [] 
             for recurso_data in evento_data.get("recursos", []):
                 if isinstance(recurso_data, dict):
                     # Vamos a deserializar los recursos a partir de ID

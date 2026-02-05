@@ -494,7 +494,7 @@ def main():
         st.session_state.current_page = "dashboard"
     
     # Calcular eventos próximos para el badge
-    eventos_proximos = planificador.listar_eventos(dias=7)
+    eventos_proximos = planificador.gestor_eventos.eventos.values()
     num_eventos_proximos = len(eventos_proximos)
     
     # Definir páginas
@@ -760,27 +760,84 @@ def show_dashboard(planificador):
     
     
 def show_eventos(planificador):
-    """Gestión de eventos"""
-    st.title("📅 Gestión de Eventos")
+    """Gestión COMPLETA de eventos - Incluye todos"""
+    st.title("📅 Gestión de Eventos - Vista Completa")
     
     # Filtros
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        dias = st.slider("Días a mostrar", 1, 30, 7)
-    with col2:
-        tipo_filtro = st.selectbox("Filtrar por tipo", ["Todos", "entrenamiento", "procesamiento", "investigación", "reunión", "seminario", "inferencia"])
-    with col3:
-        estado_filtro = st.selectbox("Filtrar por estado", ["Todos", "planificado", "en_curso", "completado", "cancelado"])
+    col_filtro1, col_filtro2, col_filtro3 = st.columns(3)
     
-    # Obtener eventos
-    eventos = planificador.listar_eventos(dias=dias)
+    with col_filtro1:
+        # Selector de vista predefinida
+        vista_predefinida = st.selectbox(
+            "📋 Vista rápida",
+            [
+                "Todos los eventos",
+                "próximos", 
+                "completados",
+                "en curso",
+                "cancelados",
+                "Histórico (más de 7 días)"
+            ],
+            key="vista_rapida"
+        )
     
-    # Aplicar filtros
+    with col_filtro2:
+        # Slider de días 
+        if vista_predefinida == "Todos los eventos":
+            dias = st.slider("Días a mostrar", 1, 365, 365, 
+                           help="Está función solo aplica para \"próximos\" (días a mostrar en el futuro) y \"completados\" (días a mostrar en el pasado)")
+        else:
+            dias = st.slider("Días a mostrar", 1, 365, 30)
+    
+    with col_filtro3:
+        # Filtro por tipo
+        tipo_filtro = st.selectbox(
+            "Filtrar por tipo", 
+            ["Todos", "entrenamiento", "procesamiento", "investigación", "reunión", "seminario", "inferencia"]
+        )
+    
+     
+    # lista base de todos los eventos primero
+    todos_eventos = list(planificador.gestor_eventos.eventos.values())
+    ahora = datetime.now()
+    
+    # Aplicar filtro de vista predefinida
+    if vista_predefinida == "Todos los eventos":
+        eventos = todos_eventos
+    
+    elif vista_predefinida == "próximos":
+        # Eventos que inician en el futuro (dentro del rango de días)
+        fecha_limite = ahora + timedelta(days=dias)
+        eventos = [e for e in todos_eventos if ahora <= e.inicio <= fecha_limite]
+    
+    elif vista_predefinida == "completados":
+        # Eventos completados en el rango de días hacia atrás
+        fecha_limite = ahora - timedelta(days=dias)
+        eventos = [e for e in todos_eventos if e.estado == 'completado' and e.fin >= fecha_limite]
+    
+    elif vista_predefinida == "en curso":
+        # Eventos que están en curso ahora mismo
+        eventos = [e for e in todos_eventos if e.estado == 'en_curso']
+    
+    elif vista_predefinida == "cancelados":
+        # Eventos cancelados (sin límite temporal por defecto)
+        eventos = [e for e in todos_eventos if e.estado == 'cancelado']
+    
+    elif vista_predefinida == "Histórico (más de 7 días)":
+        # Eventos que terminaron hace más de 7 días
+        limite = ahora - timedelta(days=7)
+        eventos = [e for e in todos_eventos if e.fin < limite]
+    
+    else:
+        # Caso por defecto (no debería ocurrir)
+        eventos = []
+        
+    # Aplicar filtro de tipo
     if tipo_filtro != "Todos":
         eventos = [e for e in eventos if e.tipo == tipo_filtro]
     
-    if estado_filtro != "Todos":
-        eventos = [e for e in eventos if e.estado == estado_filtro]
+    # Ordenar por fecha de inicio (más reciente primero)
+    eventos.sort(key=lambda e: e.inicio, reverse=True)
     
     # Mostrar eventos
     if eventos:
