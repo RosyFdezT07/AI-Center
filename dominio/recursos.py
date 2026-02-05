@@ -5,14 +5,14 @@ import uuid
 
 @dataclass
 class Recurso:
-    """Clase que representa un recurso en el centro de investigación?"""
+    """Clase que representa un recurso en el centro de investigación"""
     id: str = ""
     nombre: str = ""
     tipo: str = "" #computacional, humano, espacio, equipo
     capacidad: int = 1 #Para recursos que posean múltiples unidades
     atributos: Dict[str, Any] = field(default_factory=dict)
     
-    def __post_init__(self):#función que es un método de instancia, opera sobre instancias
+    def __post_init__(self): # Función que es un método de instancia, opera sobre instancias
         """Validaciones después de la inicialización"""
         if not self.id:
             self.id = f"recurso_{uuid.uuid4().hex[:8]}"

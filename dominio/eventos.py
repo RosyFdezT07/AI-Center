@@ -12,7 +12,7 @@ from .recursos import Recurso
 
 @dataclass
 class Evento:
-    """clase que representa a un evento en el sistema de planificación"""
+    """Clase que representa a un evento en el sistema de planificación"""
     nombre: str
     inicio: datetime
     fin: datetime 
@@ -30,7 +30,7 @@ class Evento:
         self.validar_tipo()
 
     def validar_fechas(self):
-        """si las fechas son consistentes, valida"""
+        """Si las fechas son consistentes, valida"""
         if self.inicio >= self.fin:
             raise ValueError("El inicio debe ser anterior al fin")
     
@@ -186,7 +186,7 @@ class Evento:
 
     def __str__(self):
         """Representación legible del evento"""
-        #Formatear recursos
+        # Formatear recursos
         if not self.recursos: 
             recursos_str = "No hay recursos" 
         else:
@@ -202,21 +202,21 @@ class Evento:
         } 
         icono = estado_iconos.get(self.estado, "🗓️") 
 
-        #Variables condicionales
+        # Variables condicionales
         formato_completo = '%d/%m/%Y %H:%M'
         es_mismo_día = self.inicio.date() == self.fin.date()
         duracion_horas = (self.fin - self.inicio).total_seconds() / 3600
 
-        #Lógica de formato condicional 
+        # Lógica de formato condicional 
         if es_mismo_día:
-            #Si la duración es menos de 12 horas
+            # Si la duración es menos de 12 horas
             if duracion_horas < 12:
                 fecha_str = f"{self.inicio.strftime(formato_completo)}-{self.fin.strftime('%H:%M')}"
             else:
-                #Si la duración de los días es mayor que 12 horas, día largo
+                # Si la duración de los días es mayor que 12 horas, día largo
                 fecha_str = f"{self.inicio.strftime(formato_completo)}-{self.fin.strftime('%H:%M')}({int(duracion_horas)}h)"
         else:
-            #Evento que cruza días
+            # Evento que cruza días
             fecha_str = f"{self.inicio.strftime(formato_completo)}-{self.fin.strftime(formato_completo)}"
 
         return f"{icono} {self.nombre} ({fecha_str}) - {recursos_str}"
@@ -243,7 +243,7 @@ class GestorEventos:
         return self.eventos.get(id_evento)
     
     def obtener_fecha_inicio(self, fecha:datetime) ->List[Evento]:
-        """Obtener todos los eventos que empiezan en una fecha específica( el mismo día)"""
+        """Obtener todos los eventos que empiezan en una fecha específica(el mismo día)"""
         return [e for e in self.eventos.values() 
                 if e.inicio.date()==fecha.date()]
     
@@ -292,7 +292,7 @@ class GestorEventos:
                 continue
             
             recursos_reconstruidos = []
-            # Caso 1: Ya es un objeto Recurso: No debería pasar en JSON
+            # Ya es un objeto Recurso: No debería pasar en JSON
             for recurso_item in evento_data['recursos']:
                 if isinstance(recurso_item, Recurso):
                     recursos_reconstruidos.append(recurso_item)
@@ -308,29 +308,29 @@ class GestorEventos:
                     # Formato no reconocido
                     continue
                 
-                #Buscar el recurso en el diccionario
+                # Buscar el recurso en el diccionario
                 if recurso_id and recurso_id in recursos_dict:
                     recurso_obj = recursos_dict[recurso_id]
                     recursos_reconstruidos.append(recurso_obj)
                     
                 elif recurso_id:
                     # Lanzar una advertencia
-                    print (f"Recurso no encontrado: {recurso_id}")
+                    print (f" Recurso no encontrado: {recurso_id}")
                     
             # Actualizar el evento con los recursos reconstruidos 
             evento_data_actualizado = evento_data.copy()
             evento_data_actualizado['recursos'] = recursos_reconstruidos
                 
-            #Crear evento
+            # Crear evento
             try: 
                 evento = Evento.from_dict(evento_data_actualizado)
                 self.agregar_evento(evento)
                         
             except Exception as e:
-                print (f"Error al cargar evento {e}")
+                print (f" Error al cargar evento {e}")
                         
                 
-    def to_list(self) ->List[Dict[str, Any]]:
+    def to_list(self) -> List[Dict[str, Any]]:
         """Convierte todos los eventos a lista de diccionarios"""
         return [ evento.to_dict() for evento in self.eventos.values()]
     
