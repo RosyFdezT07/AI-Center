@@ -190,6 +190,7 @@ class Planificador:
             eventos_interes = [
                 ev for ev in self.gestor_eventos.eventos.values()
                 if ev.id != nuevo_evento.id 
+                and ev.estado != 'cancelado'
                 and ev.se_solapa_con(nuevo_evento)
                 and any(r.id == id_recurso for r in ev.recursos)
             ]
