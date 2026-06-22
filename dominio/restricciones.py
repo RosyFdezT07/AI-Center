@@ -38,9 +38,9 @@ class RestriccionCoRequisito(Restriccion):
                 
     
     def es_valida(self,recursos: List['Recurso'], evento:'Evento')->bool:
-        #Para saber si posee la lista de recursos , el recurso principal y requerido
+        # Para saber si posee la lista de recursos, el recurso principal y requerido
         tiene_principal = any(r.id == self.principal for r in recursos)
-        #La función any() devuelve True si se cumple al menos para uno y False si no se cumpla para ninguno
+        # La función any() devuelve True si se cumple al menos para uno y False si no se cumpla para ninguno
         tiene_requerido = any(r.id == self.requerido for r in recursos)
 
         if tiene_principal and not tiene_requerido:
@@ -83,10 +83,10 @@ class RestriccionCapacidad(Restriccion):
         self.tipo_recurso = tipo_recurso
 
     def es_valida(self, recursos:List['Recurso'], evento:'Evento') ->bool:
-        #Vamos a contar la cantidad de recursos que sean del tipo especificado
+        # Vamos a contar la cantidad de recursos que sean del tipo especificado
         cantidad = sum( 1 for r in recursos if r.tipo == self.tipo_recurso)
 
-        #Comprobamos si esta cantidad no se excede a la máxima disponibilidad
+        # Comprobamos si esta cantidad no se excede a la máxima disponibilidad
         return cantidad <= self.capacidad_maxima
     
     def mensaje_error(self) ->str:
