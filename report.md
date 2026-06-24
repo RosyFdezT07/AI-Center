@@ -150,6 +150,13 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
 - **Solución implementada**: Se centralizó el estado en `st.session_state['planificador']` y se forzó rerun después de operaciones mutadoras usando `st.rerun()`.
 - **Resultado**: Experiencia de usuario consistente con actualización en tiempo real.
 
+**Problema 5: Incompatibilidad entre el comando de ejecución del bot y el framework Streamlit**
+
+- **Situación inicial**: El sistema de verificación automática del curso requiere estrictamente que el punto de entrada sea un archivo llamado main.py ejecutable mediante el comando python main.py. Sin embargo, la interfaz gráfica del proyecto fue desarrollada con Streamlit, lo que exige el comando streamlit run app.py para levantar el servidor web.
+- **Síntoma**: Al intentar ejecutar el proyecto de la forma estándar requerida por el bot, el sistema fallaría al no encontrar un archivo main.py en la raíz o al no inicializar el servidor web de manera correcta.
+- **Solución implementada**: Se diseñó un patrón adaptador/envoltorio (wrapper) mediante la creación de un archivo main.py intermedio. Este script utiliza el módulo integrado os de la biblioteca estándar de Python para interactuar directamente con el sistema operativo. Al ser ejecutado, el script realiza una llamada al sistema mediante os.system("streamlit run app.py"), funcionando como un puente invisible que redirige la solicitud del bot hacia el framework de la interfaz web.
+- **Resultado**: Se garantizó la total compatibilidad con las pruebas automatizadas del curso sin comprometer la arquitectura basada en Streamlit ni requerir configuraciones adicionales por parte del evaluador.
+
 ## 4. Lógica del Sistema 
 
 ### *4.1 Algoritmo de Planificación de Eventos (Paso a Paso)*
@@ -220,7 +227,7 @@ El sistema de persistencia implementa características avanzadas:
 **Migración automática**: Al cargar `datos.json` (formato antiguo), detecta la ausencia de campo `restricciones` y automáticamente:
 1. Carga datos en formato antiguo
 2. Aplica restricciones predeterminadas
-3. Guarda en nuevo formato `datos_sistema.json`
+3. Guarda en nuevo formato `datos.json`
 4. Notifica al usuario de la migración
 
 **Integridad referencial**: Durante la carga:
@@ -258,7 +265,7 @@ def cargar_sistema(archivo):
 
 ## 5. Conclusiones
 
-### *5.3 Conclusiones*
+### *5.1 Conclusiones*
 
 El proyecto resultó en un sistema robusto que no solo cumple con los requisitos básicos sino que implementa funcionalidades avanzadas propias de sistemas profesionales. La arquitectura por capas demostró ser efectiva para manejar la complejidad, permitiendo que cada módulo evolucionara independientemente.
 
