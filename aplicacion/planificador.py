@@ -7,7 +7,7 @@ import os
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Tuple, Any
 
-# Importaciones relativas desde el paquete
+# Importaciones absolutas desde el paquete
 from dominio.recursos import Recurso, GestorRecursos, crear_recursos_predeterminados
 from dominio.eventos import Evento, GestorEventos
 from dominio.restricciones import Restriccion, crear_restricciones_predeterminadas, validar_restricciones

@@ -23,9 +23,9 @@ El sistema maneja seis categorías principales de eventos, cada una con caracter
 Los recursos se modelaron en tres grupos principales con atributos específicos que permiten validaciones complejas:
 
 **Recursos Computacionales:**
-- Clusters GPU (A100, V100) con atributos como memoria GPU, consumo energético y software preinstalado
+- Clusters GPU (A100, V100) con atributos como memoria GPU y consumo energético
 - Servidores CPU de alta memoria con especificaciones de núcleos y RAM
-- Estaciones de trabajo especializadas con capacidades de gráficos específicas
+- Estaciones de trabajo especializadas 
 
 **Recursos Humanos:**
 - Investigadores senior con atributos de especialización, años de experiencia y certificaciones

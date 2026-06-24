@@ -7,7 +7,7 @@ from datetime import datetime
 from typing import List, Any, Dict
 import os
 
-# Usando importaciones relativas 
+# Usando importaciones absolutas 
 from dominio.recursos import Recurso, GestorRecursos 
 from dominio.eventos import Evento, GestorEventos
 from dominio.restricciones import (

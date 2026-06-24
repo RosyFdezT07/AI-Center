@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import List, TYPE_CHECKING
 
-# IMPORTANTE: Evita dependencias circulares
+# Evita dependencias circulares
 if TYPE_CHECKING:
     # Solo para type checking durante desarrollo
     from ..dominio.recursos import Recurso
