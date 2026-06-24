@@ -517,7 +517,6 @@ def main():
             if st.button(f"{page_info['icon']} {page_info['label']}", key=f"nav_{page_id}", 
                         use_container_width=True):
                 st.session_state.current_page = page_id
-                st.rerun()
         
         with col2:
             if page_info['badge']:
@@ -771,8 +770,8 @@ def show_eventos(planificador):
         vista_predefinida = st.selectbox(
             "📋 Vista rápida",
             [
-                "Todos los eventos",
-                "próximos", 
+                "próximos",
+                "Todos los eventos", 
                 "completados",
                 "en curso",
                 "cancelados",
@@ -1028,12 +1027,38 @@ def show_nuevo_evento(planificador):
     """Formulario para nuevo evento"""
     st.title("➕ Planificar Nuevo Evento")
     
+    # Inicialización del estado para los campos de fecha/hora
+    now = datetime.now()
+    fin_defecto = now + timedelta(minutes=15)
+    if 'nuevo_evento_fecha' not in st.session_state:
+        st.session_state.nuevo_evento_fecha = now.date()
+    if 'nuevo_evento_hora_inicio' not in st.session_state:
+        st.session_state.nuevo_evento_hora_inicio = now.time()
+    if 'nuevo_evento_fecha_fin' not in st.session_state:
+        st.session_state.nuevo_evento_fecha_fin = fin_defecto.date()
+    if 'nuevo_evento_hora_fin' not in st.session_state:
+        st.session_state.nuevo_evento_hora_fin = fin_defecto.time()
+    
     # Inicializar estado si no existe
     if 'evento_planificado' not in st.session_state:
         st.session_state.evento_planificado = None
-    
-    # Formulario principal
-    with st.form("nuevo_evento_form", clear_on_submit=True):
+        
+    # Precarga desde búsqueda de huecos
+    if 'nuevo_evento_precargado' in st.session_state: 
+        precarga = st.session_state.nuevo_evento_precargado
+        hueco = precarga['hueco']
+        # Sobrescribir el estado con los valores del hueco
+        st.session_state.nuevo_evento_fecha = hueco['inicio'].date()
+        st.session_state.nuevo_evento_hora_inicio = hueco['inicio'].time()
+        st.session_state.nuevo_evento_fecha_fin = hueco['fin'].date()
+        st.session_state.nuevo_evento_hora_fin = hueco['fin'].time()
+        # Limpiar la precarga para que no se reaplique en el siguiente rerun
+        del st.session_state.nuevo_evento_precargado
+        # Forzar rerun para que los widgets tomen los nuevos valores
+        st.rerun()
+        
+    # Formulario principal (clear_on_submit=False para no reiniciar automáticamente)
+    with st.form("nuevo_evento_form", clear_on_submit=False):
         col1, col2 = st.columns(2)
         
         with col1:
@@ -1044,15 +1069,13 @@ def show_nuevo_evento(planificador):
         
         with col2:
             # Usar key en los controles para que Streamlit maneje el estado automáticamente
-            fecha = st.date_input(
+            fecha_inicio = st.date_input(
                 "📅 Fecha de inicio *", 
-                datetime.now().date(),
                 key="nuevo_evento_fecha"
             )
             
             hora_inicio = st.time_input(
                 "⏰ Hora de inicio *", 
-                datetime.now().time(),
                 key="nuevo_evento_hora_inicio"
             )
             
@@ -1062,20 +1085,18 @@ def show_nuevo_evento(planificador):
             with col_fecha_fin:
                 fecha_fin = st.date_input(
                     "📅 Fecha de fin *", 
-                    datetime.now().date(),
                     key="nuevo_evento_fecha_fin"
                 )
             
             with col_hora_fin:
                 hora_fin = st.time_input(
                     "⏰ Hora de fin *", 
-                    (datetime.now() + timedelta(hours=2)).time(),
                     key="nuevo_evento_hora_fin"
                 )
             
-            # Calcular inicio y fin completos
-            inicio = datetime.combine(fecha, hora_inicio)
-            fin = datetime.combine(fecha_fin, hora_fin)
+            # Calcular inicio y fin a partir del estado
+            inicio = datetime.combine(st.session_state.nuevo_evento_fecha, st.session_state.nuevo_evento_hora_inicio)
+            fin = datetime.combine(st.session_state.nuevo_evento_fecha_fin, st.session_state.nuevo_evento_hora_fin)
             
             # Calcular duración en horas
             if inicio and fin:
@@ -1213,7 +1234,7 @@ def show_nuevo_evento(planificador):
                 fin_str = fin.strftime('%H:%M')
             
             st.markdown(f"""
-            **Fecha:** {fecha}
+            **Fecha:** {fecha_inicio}
             **Inicio:** {hora_inicio}
             **Fin:** {fin_str}
             **Duración:** {duracion_str}
@@ -1475,7 +1496,6 @@ def show_datos(planificador):
                 with st.spinner("Cargando..."):
                     if planificador.cargar_datos(archivo_cargar):
                         st.success("✅ Datos cargados exitosamente")
-                        st.rerun()
                     else:
                         st.error("❌ Error al cargar datos")
         

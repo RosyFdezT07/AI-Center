@@ -238,21 +238,36 @@ python -c "import plotly; print('✅ Plotly instalado')"
 
 *Iniciar la Aplicación*
 
-streamlit run app.py
+```bash
+python main.py
+```
+Nota: Este comando iniciará automáticamente el servidor de Streamlit a través de nuestro script puente
 
-*La aplicación se abrirá automáticamente en http://localhost:8501
+*La aplicación se abrirá inmediatamente en http://localhost:8501
 
 🖥️ Pantallas Principales
 
-1.📊 Dashboard Principal
+1. 📊 Dashboard Principal
 
 • Métricas clave: Recursos, eventos, ocupación
 
 • Eventos próximos: Próximos 7 días
 
-Alertas: Conflictos inminentes, recursos sobreutilizados
+2. 📅 Gestión de Eventos
 
-2.📅 Gestión de Eventos
+• Visualización de todos los eventos creados
+
+• Filtrar por estado y tipo
+
+3. 🔧 Gestión de Recursos
+
+• Inventario completo: Ver todos los recursos disponibles
+
+• Agenda por recurso: Timeline de uso específico
+
+• Estadísticas
+
+4. ✨ Nuevo Evento
 
 **Ejemplo: Planificar nuevo evento**
 1. Nombre: "Entrenamiento Modelo Detección Cáncer"
@@ -263,7 +278,7 @@ Alertas: Conflictos inminentes, recursos sobreutilizados
 6. Recursos: Cluster GPU A100 + Investigador Visión
 7. Prioridad: ⭐⭐⭐⭐⭐ (Crítico)
 
-3. 🔍 Búsqueda de Huecos
+5. 🔍 Búsqueda de Huecos
 
 • Parámetros: Duración, recursos necesarios, rango de fechas
 
@@ -271,15 +286,8 @@ Alertas: Conflictos inminentes, recursos sobreutilizados
 
 • Resultados: Visualización de los próximos 10 huecos disponibles
 
-4. 🔧 Gestión de Recursos
 
-• Inventario completo: Ver todos los recursos disponibles
-
-• Agenda por recurso: Timeline de uso específico
-
-• Estadísticas
-
-5. 💾 Gestión de Datos
+6. 💾 Gestión de Datos
 • Guardar/cargar estado del sistema
 • Sistema de backup automático
 • Limpieza de eventos antiguos
@@ -336,6 +344,8 @@ AI-Center/
 │   
 ├── app.py                
 # Interfaz web Streamlit
+├──main.py
+# Script puente
 ├── requirements.txt      
 # Dependencias
 ├── README.md            
@@ -388,7 +398,7 @@ infraestructura/persistencia.py - Gestor de Estado
 
 1. Código Fuente
 
-    -> 13 archivos Python organizados por responsabilidad
+    -> Archivos Python organizados por responsabilidad
 
     -> Comentarios detallados en español
 
@@ -443,7 +453,7 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
  Búsqueda de huecos inteligente con algoritmo optimizado
 
- Sistema de prioridades (1-5 estrellas) que afecta la planificación
+ Sistema de prioridades (1-5 estrellas)
 
  Estados de evento (planificado, en curso, completado, cancelado)
 
