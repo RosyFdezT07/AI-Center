@@ -149,7 +149,7 @@ Justificación organizacional: Grupos pequeños son más eficientes
 
 • Búsqueda automática de huecos en los próximos 7 días
 
-• Priorización inteligente de eventos (1-5 estrellas)
+• Priorización de eventos (1-5 estrellas)
 
 *🔍 Gestión Avanzada*
 

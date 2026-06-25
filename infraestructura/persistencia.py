@@ -86,10 +86,11 @@ class Persistencia:
                     recurso_id = recurso_data.get('id')
                     recurso = gestor_recursos.obtener_recurso(recurso_id)
                     if not recurso:
-                        raise ValueError(
+                        print(
                             f"El recurso con ID '{recurso_id}' referenciado en evento '{evento_data.get('id', 'sin id')}', "
-                            "no es encontrado en el gestor de recursos"
+                            "no es encontrado en el gestor de recursos.Omitiendo recurso"
                         )   
+                        continue
                     recursos_evento.append(recurso)
                 else:
                     #En caso de que el recurso sea una instancia de la clase Recurso

@@ -250,7 +250,7 @@ class GestorEventos:
     def obtener_por_rango_fecha(self, inicio:datetime, fin:datetime) ->List[Evento]:
         """Obtiene todos los eventos que ocurren en un rango de fechas"""
         return [e for e in self.eventos.values()
-                if inicio <= e.inicio <= fin or inicio <= e.fin <= fin]
+                if e.inicio <= fin and e.fin >= inicio]
     
     def obtener_por_tipo(self, tipo:str) ->List[Evento]:
         """Obtiene todos los eventos que tengan un tipo específico"""

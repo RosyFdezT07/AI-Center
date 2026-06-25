@@ -223,7 +223,7 @@ def initialize_planificador():
             
             # Reemplazar si hubo cambios
             if len(eventos_validos) < len(st.session_state.planificador.gestor_eventos.eventos):
-                st.session_state.planificador.gestor_eventos.eventos = eventos_validos
+                st.session_state.planificador.gestor_eventos.eventos = {e.id: e for e in eventos_validos}
                 st.session_state.planificador.guardar_datos()
                 st.toast("⚠️ Algunos eventos corruptos fueron eliminados", icon="⚠️")
             
@@ -261,11 +261,14 @@ def verificar_duplicados(planificador):
     if duplicados:
         print(f"⚠️ Encontrados {len(duplicados)} recursos duplicados: {duplicados}")
         
-        # Crear nuevo gestor sin duplicados
+        # Crear nuevo gestor sin duplicados, sin excluirlos 
         nuevo_gestor = GestorRecursos()
+        ids_agregados = set()
         for recurso in recursos:
-            if recurso.id not in duplicados:
+            if recurso.id not in ids_agregados:
                 nuevo_gestor.agregar_recurso(recurso)
+                ids_agregados.add(recurso.id)
+            
         
         # Reemplazar gestor
         planificador.gestor_recursos = nuevo_gestor
