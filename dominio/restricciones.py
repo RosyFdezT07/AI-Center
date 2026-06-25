@@ -8,8 +8,8 @@ from typing import List, TYPE_CHECKING
 # Evita dependencias circulares
 if TYPE_CHECKING:
     # Solo para type checking durante desarrollo
-    from ..dominio.recursos import Recurso
-    from ..dominio.eventos import Evento
+    from .recursos import Recurso
+    from .eventos import Evento
     from ..core.interfaces import IRecursoProtocol, IEventoProtocol
 
 class Restriccion(ABC):

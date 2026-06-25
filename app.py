@@ -1290,6 +1290,9 @@ def show_nuevo_evento(planificador):
                 
                 st.info(f"💡 **Razón:** Recursos ocupados en el horario original")
                 
+                st.session_state.evento_planificado = True
+                planificador.guardar_datos()
+                
             else:
                 # Evento en fecha original
                 st.success("✅ Evento planificado en la fecha solicitada")
