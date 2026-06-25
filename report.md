@@ -91,10 +91,10 @@ El sistema se estructuró en cuatro capas siguiendo principios de Arquitectura L
 El desarrollo siguió una metodología incremental con retrospectivas después de cada hito:
 
 **Iteración 1 (3 semanas): Sistema de restricciones y planificación básica**
-- Se implementó la jerarquía de restricciones y el algoritmo de validación
-- **Problema encontrado**: Las restricciones de capacidad no consideraban recursos con capacidad>1
-- **Solución**: Se extendió la interfaz de restricciones para recibir no solo la lista de recursos sino también las cantidades solicitadas
-- **Aprendizaje**: Las interfaces deben diseñarse pensando en extensibilidad futura
+- Se implementó la jerarquía de restricciones (co-requisito, exclusión mutua, y capacidad) junto con el algoritmo de validación correspondiente, que recibe una lista plana( cantidades desglosadas en elementos individuales dentro de una lista) de objetos Recurso y el evento a evaluar
+- **Problema encontrado**: Las restricciones de capacidad, inicialmente diseñadas para contar recursos físicos únicos, no consideraban que un mismo recurso pudiera tener capacidad > 1 (por ejemplo 4 estaciones RTX 4090 disponibles). Si un evento solicitaba 2 unidades de ese recurso, la restricción contaba solo 1 elemento, invalidando el control de límites reales.
+- **Solución**: En lugar de modificar la interfaz de las restricciones (cuyo método es_valida espera una lista de objetos Recurso), se optó por "aplanar" las cantidades solicitadas en la capa de aplicación, dentro del método planificar_evento de la clase Planificador. De esta forma, si un evento requiere 3 unidades de un recurso, se añade el mismo objeto Recurso 3 veces a la lista que se pasa a validar_restricciones(). Las restricciones de capacidad pueden entonces sumar el total de elementos por tipo de recurso, sin necesidad de cambiar su firma original. Esto mantiene la interfaz estable y el motor de restricciones centrado exclusivamente en validar listas de recursos, delegando la gestión de cantidades a la lógica de planificación.
+- **Aprendizaje**: Las interfaces deben diseñarse pensando en extensibilidad, pero cuando el cambio puede mantenerse encapsulado en la capa de aplicación sin afectar al núcleo del dominio, se gana en simplicidad y estabilidad.
 
 **Iteración 2 (2 semanas): Persistencia y recuperación de estado**
 - Se implementó la serialización/deserialización completa

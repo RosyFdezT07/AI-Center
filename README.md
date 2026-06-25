@@ -58,13 +58,13 @@ Cluster GPU A100 - 8x NVIDIA A100, 320GB, $500K
 
 Cluster GPU V100 - 4x NVIDIA V100, 128GB, $250K
 
-Servidor CPU High-Memory - 2TB RAM, 128 núcleos
+Servidor CPU High-Memory - 1TB RAM, 128 núcleos
 
 Estación de Trabajo RTX 4090 - 4 unidades disponibles
 
 👨‍🔬 Recursos Humanos
 
-Investigador Senior - Visión Computacional - PhD, 5+ años experiencia
+Investigador Senior - Visión Computacional - 5+ años experiencia
 
 Investigador Senior - NLP - Especialista en Large Language Models
 

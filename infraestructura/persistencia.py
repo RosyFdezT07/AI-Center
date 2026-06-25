@@ -196,7 +196,7 @@ class Persistencia:
         return archivo_backup
     
     @staticmethod
-    def listar_backups(directorio_backups: str = "backups") ->List[str]:    
+    def listar_backups(directorio_backups: str = "backups") ->List[Dict[str,Any]]:    
         # directorio_backups: str = "backups" es como otorgarle un valor por defecto? 
         if not os.path.exists(directorio_backups):
             return []     
