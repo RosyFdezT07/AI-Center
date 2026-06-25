@@ -29,8 +29,8 @@ Los recursos se modelaron en tres grupos principales con atributos específicos 
 
 **Recursos Humanos:**
 - Investigadores senior con atributos de especialización, años de experiencia y certificaciones
-- Ingenieros de MLOps con habilidades específicas en plataformas cloud
-- Científicos de datos con niveles de acceso a datos sensibles
+- Ingenieros de MLOps con habilidades específicas 
+- Científicos de datos 
 
 **Espacios Físicos:**
 - Laboratorios con requisitos de acceso
@@ -58,7 +58,7 @@ Antes de escribir la primera línea de código, se realizó un proceso de diseñ
 
 1. **Modelado de dominio**: Se identificaron las entidades principales (Evento, Recurso) y sus relaciones mediante diagramas de clases iniciales. Este proceso reveló la necesidad de separar la "capacidad" de un recurso de su "existencia física", lo que llevó al diseño de recursos con atributo de capacidad.
 
-2. **Definición de escenarios de uso**: Se escribieron 15 escenarios de uso específicos (ej: "Planificar entrenamiento de modelo CNN con datos médicos") que ayudaron a identificar requisitos funcionales y no funcionales.
+2. **Definición de escenarios de uso**: Se escribieron 15 escenarios de uso específicos, que ayudaron a identificar requisitos funcionales y no funcionales.
 
 3. **Evaluación de alternativas arquitectónicas**: Se consideraron varias arquitecturas posibles, seleccionándose la arquitectura por capas por su balance entre simplicidad y separación de responsabilidades.
 
@@ -90,28 +90,22 @@ El sistema se estructuró en cuatro capas siguiendo principios de Arquitectura L
 
 El desarrollo siguió una metodología incremental con retrospectivas después de cada hito:
 
-**Iteración 1 (2 semanas): Entidades básicas y gestores**
-- Se implementaron `Recurso`, `Evento`, `GestorRecursos`, `GestorEventos`
-- **Problema encontrado**: La comparación de fechas con zonas horarias causaba inconsistencias
-- **Solución**: Se estandarizó en UTC para almacenamiento y se convirtió a hora local solo para visualización
-- **Aprendizaje**: Las operaciones con datetime requieren un manejo consistente de timezone desde el inicio
-
-**Iteración 2 (3 semanas): Sistema de restricciones y planificación básica**
+**Iteración 1 (3 semanas): Sistema de restricciones y planificación básica**
 - Se implementó la jerarquía de restricciones y el algoritmo de validación
 - **Problema encontrado**: Las restricciones de capacidad no consideraban recursos con capacidad>1
 - **Solución**: Se extendió la interfaz de restricciones para recibir no solo la lista de recursos sino también las cantidades solicitadas
 - **Aprendizaje**: Las interfaces deben diseñarse pensando en extensibilidad futura
 
-**Iteración 3 (2 semanas): Persistencia y recuperación de estado**
+**Iteración 2 (2 semanas): Persistencia y recuperación de estado**
 - Se implementó la serialización/deserialización completa
 - **Problema encontrado**: Al cargar eventos, las referencias a recursos se perdían
 - **Solución**: Se implementó un sistema de "reconstrucción de referencias" que primero carga todos los recursos en un diccionario por ID, luego los asigna a eventos
 - **Aprendizaje**: La persistencia de grafos de objetos requiere estrategias específicas
 
-**Iteración 4 (3 semanas): Interfaz de usuario y optimizaciones**
+**Iteración 3 (3 semanas): Interfaz de usuario y optimizaciones**
 - Se desarrolló la interfaz Streamlit con dashboard y formularios
 - **Problema encontrado**: La recarga completa de la página con cada interacción era lenta
-- **Solución**: Se implementó uso intensivo de `st.session_state` para mantener estado entre interacciones Se implementó el patrón Template Method en `planificar_evento()` donde los pasos de validación son fijos pero ciertas operaciones (como la búsqueda de huecos alternativos) pueden variar.
+- **Solución**: Se implementó uso intensivo de `st.session_state` para mantener estado entre interacciones.
 - **Aprendizaje**: Las aplicaciones web interactivas requieren gestión cuidadosa del estado del cliente
 
 ### *3.2 Problemas Técnicos Específicos y Soluciones*
@@ -211,7 +205,7 @@ Las restricciones implementan un sistema de lógica proposicional básica:
 - Entonces recurso_requerido ∈ recursos_solicitados
 - Equivalente lógico: ¬(A ∧ ¬B)
 
-**Exclusiones mutuas**: Implementan disyunción exclusiva (A ⊕ B)
+**Exclusiones mutuas**:
 - No (A ∈ recursos_solicitados ∧ B ∈ recursos_solicitados)
 - Permite casos: ninguno, solo A, solo B
 - Equivalente lógico: ¬(A ∧ B)
@@ -223,12 +217,6 @@ Las restricciones implementan un sistema de lógica proposicional básica:
 ### *4.3 Persistencia como Sistema de Versionado Implícito*
 
 El sistema de persistencia implementa características avanzadas:
-
-**Migración automática**: Al cargar `datos.json` (formato antiguo), detecta la ausencia de campo `restricciones` y automáticamente:
-1. Carga datos en formato antiguo
-2. Aplica restricciones predeterminadas
-3. Guarda en nuevo formato `datos.json`
-4. Notifica al usuario de la migración
 
 **Integridad referencial**: Durante la carga:
 ```python
@@ -261,7 +249,6 @@ def cargar_sistema(archivo):
 - Fecha y hora exacta de creación
 - Versión del esquema de datos
 - Conteos de recursos y eventos
-- Checksum para detección de corrupción
 
 ## 5. Conclusiones
 
@@ -273,7 +260,6 @@ Las decisiones más acertadas fueron:
 1. Modelar recursos con capacidad en lugar de instancias individuales
 2. Separar completamente la validación de restricciones de la verificación temporal
 3. Implementar un algoritmo de barrido de línea para detección de conflictos
-4. Diseñar un sistema de persistencia con migración automática
 
 Si se empezara de nuevo, se enfatizaría aún más la separación entre lógica de negocio e infraestructura, posiblemente utilizando inyección de dependencias para hacer los componentes aún más testables. También se exploraría el uso de una base de datos temporal especializada para consultas de intervalos más complejas.
 
