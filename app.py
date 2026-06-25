@@ -17,6 +17,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 # Importar el planificador
 from aplicacion.planificador import Planificador
 
+from dominio.restricciones import validar_restricciones
 from dominio.recursos import Recurso, GestorRecursos, crear_recursos_predeterminados
 from dominio.eventos import GestorEventos
 from infraestructura.persistencia import Persistencia
@@ -895,15 +896,23 @@ def show_eventos(planificador):
                     with col_btn3:
                         if st.button("🔄", key=f"refresh_{evento.id}", help="Reactivar evento"):
                             if evento.estado == 'cancelado':
-                                # Verificar conflictos
-                                sin_conflictos, errores = planificador.verificar_conflictos(evento) 
-                                if sin_conflictos:
+                                # 1 Verificar conflictos temporales
+                                sin_conflictos, errores = planificador.verificar_conflictos(evento)
+                                # 2 Validar restricciones
+                                es_valido, errores_rest = validar_restricciones(
+                                    evento.recursos,
+                                    evento,
+                                    planificador.restricciones
+                                ) 
+                                
+                                if sin_conflictos and es_valido:
                                     evento.metadata["cancelado"] = False
                                     st.success("✅ Evento reactivado")
                                     planificador.guardar_datos()
                                     st.rerun()
                                 else:
-                                    st.error(f"❌ No se puede reactivar debido a conflictos: {', '.join(errores)}")
+                                    todos_errores = errores + errores_rest
+                                    st.error(f"❌ No se puede reactivar debido a conflictos: {', '.join(todos_errores)}")
                             else:
                                 st.info("⚠️ Solo se pueden reactivar eventos cancelados")
                     

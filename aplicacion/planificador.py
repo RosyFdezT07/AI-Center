@@ -216,7 +216,7 @@ class Planificador:
             puntos_tiempo.append((nuevo_evento.fin, -cantidad_solicitada))
             
             # Ordenamos por fecha
-            puntos_tiempo.sort(key=lambda x: x[0])
+            puntos_tiempo.sort(key=lambda x: (x[0], x[1]))
             
             # Simulamos el uso a lo largo del tiempo
             uso_actual = 0
