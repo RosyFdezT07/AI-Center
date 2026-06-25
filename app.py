@@ -895,10 +895,15 @@ def show_eventos(planificador):
                     with col_btn3:
                         if st.button("🔄", key=f"refresh_{evento.id}", help="Reactivar evento"):
                             if evento.estado == 'cancelado':
-                                evento.metadata["cancelado"] = False
-                                st.success("✅ Evento reactivado")
-                                planificador.guardar_datos()
-                                st.rerun()
+                                # Verificar conflictos
+                                sin_conflictos, errores = planificador.verificar_conflictos(evento) 
+                                if sin_conflictos:
+                                    evento.metadata["cancelado"] = False
+                                    st.success("✅ Evento reactivado")
+                                    planificador.guardar_datos()
+                                    st.rerun()
+                                else:
+                                    st.error(f"❌ No se puede reactivar debido a conflictos: {', '.join(errores)}")
                             else:
                                 st.info("⚠️ Solo se pueden reactivar eventos cancelados")
                     

@@ -1,8 +1,8 @@
 {
   "metadata": {
-    "fecha_guardado": "2026-06-23T18:03:48.111821",
+    "fecha_guardado": "2026-06-24T21:09:15.525875",
     "version": "1.0",
-    "total_eventos": 4,
+    "total_eventos": 5,
     "total_recursos": 14,
     "total_restricciones": 10
   },
@@ -45,7 +45,7 @@
       ],
       "tipo": "investigación",
       "descripcion": "",
-      "estado": "planificado",
+      "estado": "completado",
       "prioridad": 5,
       "metadata": {}
     },
@@ -102,7 +102,7 @@
       ],
       "tipo": "seminario",
       "descripcion": "",
-      "estado": "planificado",
+      "estado": "completado",
       "prioridad": 5,
       "metadata": {}
     },
@@ -144,7 +144,7 @@
       ],
       "tipo": "entrenamiento",
       "descripcion": "",
-      "estado": "planificado",
+      "estado": "completado",
       "prioridad": 4,
       "metadata": {}
     },
@@ -201,8 +201,49 @@
       ],
       "tipo": "investigación",
       "descripcion": "",
-      "estado": "planificado",
+      "estado": "completado",
       "prioridad": 5,
+      "metadata": {}
+    },
+    {
+      "id": "evento_efee8e40",
+      "nombre": "Machine Learning",
+      "inicio": "2026-06-24T21:05:00",
+      "fin": "2026-06-24T21:20:00",
+      "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Investigador Senior - Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision",
+            "experiencia": "5+ años",
+            "certificaciones": [
+              "PyTorch",
+              "OpenCV",
+              "TensorFlow"
+            ]
+          }
+        },
+        {
+          "id": "cluster_gpu_a100",
+          "nombre": "Cluster GPU A100 (8x NVIDIA A100)",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "memoria_gpu": "320GB",
+            "procesadores": "2x AMD EPYC",
+            "ram": "512GB",
+            "almacenamiento": "50TB NVMe",
+            "consumo_energia": "6.5kW"
+          }
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "",
+      "estado": "en_curso",
+      "prioridad": 3,
       "metadata": {}
     }
   ],

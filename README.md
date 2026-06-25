@@ -151,8 +151,6 @@ Justificación organizacional: Grupos pequeños son más eficientes
 
 • Priorización inteligente de eventos (1-5 estrellas)
 
-• Manejo de márgenes de 15 minutos entre eventos para verificar solapamiento
-
 *🔍 Gestión Avanzada*
 
 • Dashboard interactivo con métricas en tiempo real

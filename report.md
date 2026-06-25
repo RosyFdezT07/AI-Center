@@ -120,17 +120,7 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
   4. Si en algún punto el uso excede la capacidad, hay conflicto
 - **Resultado**: La complejidad se redujo a O(n log n), con 100 eventos solo se requieren ~460 operaciones.
 
-**Problema 2: Serialización cíclica en JSON**
-- **Situación inicial**: Al serializar un Evento que contiene Recursos, y cada Recurso podría tener referencia a Eventos, se creaba un ciclo infinito.
-- **Síntoma**: `json.dump()` fallaba con `RecursionError` o producía archivos enormes.
-- **Solución implementada**: Se diseñó un sistema de serialización "unidireccional":
-  1. Los Recursos se serializan completamente con todos sus atributos
-  2. Los Eventos se serializan con solo los IDs de los Recursos (no los objetos completos)
-  3. Al deserializar, primero se recrean todos los Recursos y se guardan en un diccionario por ID
-  4. Luego se recrean los Eventos, buscando los Recursos por ID en el diccionario
-- **Resultado**: Archivos JSON compactos (20KB para 50 eventos) sin problemas de recursión.
-
-**Problema 3: Validación inconsistente de restricciones con múltiples unidades**
+**Problema 2: Validación inconsistente de restricciones con múltiples unidades**
 - **Situación inicial**: `RestriccionCapacidad` contaba simplemente cuántos recursos de un tipo había en un evento, pero si un recurso tenía capacidad=3 y se solicitaba 1 unidad, contaba como 1.
 - **Síntoma**: Un evento podía solicitar 4 investigadores (cada uno capacidad=1) y 1 estación de trabajo (capacidad=4) contando como solo 1 recurso computacional, violando el espíritu de la restricción.
 - **Solución implementada**: Se diferenciaron "recursos físicos" de "unidades solicitadas". Las restricciones ahora consideran:
@@ -138,13 +128,13 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
   2. Para restricciones de capacidad: suma de las unidades solicitadas de cada recurso del tipo
 - **Resultado**: Validación más precisa que refleja mejor la realidad del dominio.
 
-**Problema 4: Estado inconsistente entre pestañas en Streamlit**
+**Problema 3: Estado inconsistente entre pestañas en Streamlit**
 - **Situación inicial**: Cambios en una pestaña (ej: eliminar evento) no se reflejaban en otras pestañas sin recargar manualmente.
 - **Síntoma**: Usuario eliminaba un evento en pestaña "Eventos" pero al ir a "Dashboard" todavía aparecía.
 - **Solución implementada**: Se centralizó el estado en `st.session_state['planificador']` y se forzó rerun después de operaciones mutadoras usando `st.rerun()`.
 - **Resultado**: Experiencia de usuario consistente con actualización en tiempo real.
 
-**Problema 5: Incompatibilidad entre el comando de ejecución del bot y el framework Streamlit**
+**Problema 4: Incompatibilidad entre el comando de ejecución del bot y el framework Streamlit**
 
 - **Situación inicial**: El sistema de verificación automática del curso requiere estrictamente que el punto de entrada sea un archivo llamado main.py ejecutable mediante el comando python main.py. Sin embargo, la interfaz gráfica del proyecto fue desarrollada con Streamlit, lo que exige el comando streamlit run app.py para levantar el servidor web.
 - **Síntoma**: Al intentar ejecutar el proyecto de la forma estándar requerida por el bot, el sistema fallaría al no encontrar un archivo main.py en la raíz o al no inicializar el servidor web de manera correcta.
