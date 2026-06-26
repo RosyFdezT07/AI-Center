@@ -307,7 +307,13 @@ class Planificador:
             'message': f"No se encontró hueco disponible en los próximos 7 días"
         }
         
-    def buscar_hueco_disponible(self, recursos_ids, duracion_horas, inicio_busqueda=None, dias=7):
+    def buscar_hueco_disponible(
+        self, 
+        recursos_con_cantidad: Dict[str, int], 
+        duracion_horas: float, 
+        inicio_busqueda: Optional[datetime] = None, 
+        dias: int = 7
+        )->List[Dict[str, Any]]:
         """
         Busca huecos disponibles para un conjunto de recursos.
         Returns:
@@ -320,12 +326,14 @@ class Planificador:
         # Calcular límite 
         limite_final = inicio_busqueda + timedelta(days=dias)
         
-        # Obtener recursos
+        # Aplanar recursos (igual que en planificador_evento)
         recursos = []
-        for recurso_id in recursos_ids:
+        for recurso_id, cantidad in recursos_con_cantidad.items():
             recurso = self.gestor_recursos.obtener_recurso(recurso_id)
-            if recurso:
-                recursos.append(recurso)
+            if recurso: 
+                # Añadir recurso tantas veces como unidades se soliciten
+                for _ in range(cantidad):
+                    recursos.append(recurso)
         
         # Si no hay recursos válidos, retornar vacío
         if not recursos:
@@ -365,6 +373,8 @@ class Planificador:
                         'fin': tiempo_fin,
                         'duracion_horas': duracion_horas
                     })
+                    # Saltar al final el hueco para evitar redundancias
+                    tiempo_actual = tiempo_fin
                     
             # Si hay conflicto o no es válido, avanzar 10 minutos
             tiempo_actual += timedelta(minutes=10)

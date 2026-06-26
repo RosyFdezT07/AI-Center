@@ -380,7 +380,7 @@ def display_recurso_card(recurso):
             <strong>ID:</strong> <code>{recurso.id}</code>
         </p>
         <div style="margin-top: 10px;">
-            <button onclick="window.location.href='#agenda_{recurso.id}'" 
+            <button onclick=__init__.py app.py main.py README.md report.md requirements.txt"window.location.href='#agenda_{recurso.id}'" 
                     style="background: #00B4D8; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;">
                 📅 Ver Agenda
             </button>
@@ -1254,7 +1254,7 @@ def show_nuevo_evento(planificador):
             **Fecha:** {fecha_inicio}
             **Inicio:** {hora_inicio}
             **Fin:** {fin_str}
-            **Duración:** {duracion_str}
+            **Duración:**__init__.py app.py main.py README.md report.md requirements.txt {duracion_str}
             **Estado inicial:** {estado_automatico.upper()}
             """)
         
@@ -1332,7 +1332,6 @@ def show_nuevo_evento(planificador):
             st.session_state.evento_planificado = False
             
             
-
 def show_buscar_huecos(planificador):
     """Búsqueda de huecos disponibles"""
     st.title("🔍 Buscar Huecos Disponibles")
@@ -1355,27 +1354,42 @@ def show_buscar_huecos(planificador):
         st.subheader("1. Selecciona los recursos necesarios")
         
         recursos_disponibles = planificador.listar_recursos()
-        recursos_ids = []
+        recursos_con_cantidad = {}
         
         col_tipo1, col_tipo2, col_tipo3 = st.columns(3)
         
         with col_tipo1:
             st.markdown("#### 🧑‍🔬 Humanos")
             for recurso in [r for r in recursos_disponibles if r.tipo == "humano"]:
-                if st.checkbox(recurso.nombre, key=f"bh_hum_{recurso.id}"):
-                    recursos_ids.append(recurso.id)
-        
+                cantidad = st.number_input(
+                    f"{recurso.nombre} (Cap: {recurso.capacidad})",
+                    0, recurso.capacidad, 0, 1,
+                    key=f"bh_hum_{recurso.id}"
+                )
+                if cantidad > 0:
+                    recursos_con_cantidad[recurso.id] = cantidad
+    
         with col_tipo2:
             st.markdown("#### 💻 Computacionales")
             for recurso in [r for r in recursos_disponibles if r.tipo == "computacional"]:
-                if st.checkbox(recurso.nombre, key=f"bh_comp_{recurso.id}"):
-                    recursos_ids.append(recurso.id)
+                cantidad = st.number_input(
+                    f"{recurso.nombre} (Cap: {recurso.capacidad})",
+                    0, recurso.capacidad, 0, 1,
+                    key=f"bh_com_{recurso.id}"
+                )
+                if cantidad > 0:
+                    recursos_con_cantidad[recurso.id] = cantidad
         
         with col_tipo3:
             st.markdown("#### 🏢 Espacios")
             for recurso in [r for r in recursos_disponibles if r.tipo == "espacio"]:
-                if st.checkbox(recurso.nombre, key=f"bh_esp_{recurso.id}"):
-                    recursos_ids.append(recurso.id)
+                cantidad = st.number_input(
+                    f"{recurso.nombre} (Cap: {recurso.capacidad})",
+                    0, recurso.capacidad, 0, 1,
+                    key=f"bh_esp_{recurso.id}"
+                )
+                if cantidad > 0:
+                    recursos_con_cantidad[recurso.id] = cantidad
         
         st.markdown("<div class='separator'></div>", unsafe_allow_html=True)
         
@@ -1405,12 +1419,12 @@ def show_buscar_huecos(planificador):
     
     # Procesar la búsqueda después de enviar el formulario
     if submitted:
-        if not recursos_ids:
+        if not recursos_con_cantidad:
             st.error("❌ Debe seleccionar al menos un recurso")
             st.session_state.huecos_encontrados = None
             return
         
-        with st.spinner(f"🔍 Buscando huecos para {len(recursos_ids)} recursos..."):
+        with st.spinner(f"🔍 Buscando huecos para {len(recursos_con_cantidad)} recursos..."):
             inicio_busqueda = datetime.combine(datetime.now().date(), hora_inicio_min)
             
             # Si la hora seleccionada ya pasó hoy, usar la hora seleccionada para mañana
@@ -1420,7 +1434,7 @@ def show_buscar_huecos(planificador):
             # Llamar al método de búsqueda
             try:
                 huecos = planificador.buscar_hueco_disponible(
-                    recursos_ids=recursos_ids,
+                    recursos_con_cantidad=recursos_con_cantidad,
                     duracion_horas=duracion_horas,
                     inicio_busqueda=inicio_busqueda,
                     dias=dias_busqueda
@@ -1471,10 +1485,9 @@ def show_buscar_huecos(planificador):
                 st.subheader("🚀 Planificar en este hueco")
                 
                 if st.button(f"📅 Planificar en {huecos[0]['inicio'].strftime('%d/%m %H:%M')}"):
-                    st.session_state.hueco_seleccionado = huecos[0]
                     st.session_state.nuevo_evento_precargado = {
                         'hueco': huecos[0],
-                        'recursos_ids': recursos_ids
+                        'recursos_con_cantidad': recursos_con_cantidad
                     }
                     st.session_state.current_page = "nuevo_evento"
                     st.rerun()

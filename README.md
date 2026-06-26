@@ -149,7 +149,7 @@ Justificación organizacional: Grupos pequeños son más eficientes
 
 • Búsqueda automática de huecos en los próximos 7 días
 
-• Priorización de eventos (1-5 estrellas)
+• Sistema de etiquetado de prioridades (1-5 estrellas) para clasificar eventos visualmente
 
 *🔍 Gestión Avanzada*
 
@@ -163,7 +163,7 @@ Justificación organizacional: Grupos pequeños son más eficientes
 
 *🛡️ Robustez* 
 
-• Persistencia completa con sistema de backup automático
+• Persistencia completa con sistema de backup manual, que permite crear copias de seguridad con timestamp desde la interfaz
 
 • Manejo de errores con mensajes claros al usuario
 
@@ -451,11 +451,9 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
  Búsqueda de huecos inteligente con algoritmo optimizado
 
- Sistema de prioridades (1-5 estrellas)
-
  Estados de evento (planificado, en curso, completado, cancelado)
 
- Sistema de backup automático 
+ Sistema de backup con timestamp (creación manual desde la interfaz)
 
 
 Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.

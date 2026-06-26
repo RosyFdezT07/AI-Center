@@ -68,7 +68,7 @@ Antes de escribir la primera línea de código, se realizó un proceso de diseñ
 
 El sistema se estructuró en cuatro capas siguiendo principios de Arquitectura Limpia:
 
-**Capa Core**: Contiene definiciones de tipos e interfaces que actúan como contratos entre módulos. Esta decisión permitió desarrollar los módulos de Dominio y Aplicación de forma independiente, facilitando las pruebas unitarias. Los protocolos `IRecursoProtocol` e `IEventoProtocol` eliminan dependencias circulares permitiendo que, por ejemplo, el módulo de Restricciones pueda validar eventos sin conocer detalles de implementación.
+**Capa Core**: Contiene definiciones de tipos e interfaces que actúan como contratos entre módulos. Esta decisión permitió desarrollar los módulos de Dominio y Aplicación de forma independiente, facilitando las pruebas unitarias.
 
 **Capa Dominio**: Aquí reside el corazón del negocio. Se implementaron recursos, eventos y un sistema de restricciones, donde cada tipo de restricción es una estrategia concreta. 
 
@@ -110,17 +110,7 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
 
 ### *3.2 Problemas Técnicos Específicos y Soluciones*
 
-**Problema 1: Algoritmo ineficiente para verificación de conflictos**
-- **Situación inicial**: El método `verificar_conflictos()` comparaba el nuevo evento con todos los eventos existentes, complejidad O(n²). Con 100 eventos, requería 10,000 comparaciones.
-- **Síntoma**: La planificación de eventos se volvía lenta (2-3 segundos) con más de 50 eventos programados.
-- **Solución implementada**: Se aplicó el "algoritmo de barrido de línea" (line sweep algorithm):
-  1. Para cada recurso, se crea una lista de puntos (tiempo, cambio) donde "cambio" es +cantidad al inicio de un evento y -cantidad al final
-  2. Se ordenan estos puntos por tiempo (O(n log n))
-  3. Se recorre una vez acumulando el uso actual (O(n))
-  4. Si en algún punto el uso excede la capacidad, hay conflicto
-- **Resultado**: La complejidad se redujo a O(n log n), con 100 eventos solo se requieren ~460 operaciones.
-
-**Problema 2: Validación inconsistente de restricciones con múltiples unidades**
+**Problema 1: Validación inconsistente de restricciones con múltiples unidades**
 - **Situación inicial**: `RestriccionCapacidad` contaba simplemente cuántos recursos de un tipo había en un evento, pero si un recurso tenía capacidad=3 y se solicitaba 1 unidad, contaba como 1.
 - **Síntoma**: Un evento podía solicitar 4 investigadores (cada uno capacidad=1) y 1 estación de trabajo (capacidad=4) contando como solo 1 recurso computacional, violando el espíritu de la restricción.
 - **Solución implementada**: Se diferenciaron "recursos físicos" de "unidades solicitadas". Las restricciones ahora consideran:
@@ -128,13 +118,13 @@ El desarrollo siguió una metodología incremental con retrospectivas después d
   2. Para restricciones de capacidad: suma de las unidades solicitadas de cada recurso del tipo
 - **Resultado**: Validación más precisa que refleja mejor la realidad del dominio.
 
-**Problema 3: Estado inconsistente entre pestañas en Streamlit**
+**Problema 2: Estado inconsistente entre pestañas en Streamlit**
 - **Situación inicial**: Cambios en una pestaña (ej: eliminar evento) no se reflejaban en otras pestañas sin recargar manualmente.
 - **Síntoma**: Usuario eliminaba un evento en pestaña "Eventos" pero al ir a "Dashboard" todavía aparecía.
 - **Solución implementada**: Se centralizó el estado en `st.session_state['planificador']` y se forzó rerun después de operaciones mutadoras usando `st.rerun()`.
 - **Resultado**: Experiencia de usuario consistente con actualización en tiempo real.
 
-**Problema 4: Incompatibilidad entre el comando de ejecución del bot y el framework Streamlit**
+**Problema 3: Incompatibilidad entre el comando de ejecución del bot y el framework Streamlit**
 
 - **Situación inicial**: El sistema de verificación automática del curso requiere estrictamente que el punto de entrada sea un archivo llamado main.py ejecutable mediante el comando python main.py. Sin embargo, la interfaz gráfica del proyecto fue desarrollada con Streamlit, lo que exige el comando streamlit run app.py para levantar el servidor web.
 - **Síntoma**: Al intentar ejecutar el proyecto de la forma estándar requerida por el bot, el sistema fallaría al no encontrar un archivo main.py en la raíz o al no inicializar el servidor web de manera correcta.
