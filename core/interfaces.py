@@ -13,7 +13,6 @@ class IRecursoProtocol(Protocol):
     capacidad: int
     
     def to_dict(self) -> dict: ...
-    def es_compatible_con(self, other) -> bool: ...
 
 @runtime_checkable  
 class IEventoProtocol(Protocol):

@@ -27,6 +27,7 @@ class Planificador:
         self.gestor_recursos = GestorRecursos()
         self.gestor_eventos = GestorEventos()
         self.restricciones = crear_restricciones_predeterminadas()
+        self.advertencias_carga = []
         
     def cargar_recursos_iniciales(self, limpiar_existentes: bool = True):
         """Carga los recursos iniciales del sistema (predeterminados)"""
@@ -442,9 +443,10 @@ class Planificador:
         if os.path.exists(ruta_archivo):
         
             try:
-                gestor_eventos, gestor_recursos, restricciones = Persistencia.cargar_sistema(ruta_archivo)
+                gestor_eventos, gestor_recursos, restricciones, advertencias = Persistencia.cargar_sistema(ruta_archivo)
                 self.gestor_eventos = gestor_eventos
                 self.gestor_recursos = gestor_recursos
+                self.advertencias_carga = advertencias
                 
                 # Si no hay restricciones, crear predeterminadas
                 if not restricciones or len(restricciones) == 0:
@@ -480,7 +482,8 @@ class Planificador:
                 # Cargar eventos (necesita reconstruir referencias a recursos)
                 if 'eventos' in datos:
                     recursos_dict = {r.id: r for r in self.gestor_recursos.recursos.values()} 
-                    self.gestor_eventos.cargar_desde_lista_con_recurso(datos['eventos'], recursos_dict)
+                    advertencias = self.gestor_eventos.cargar_desde_lista_con_recurso(datos['eventos'], recursos_dict)
+                    self.advertencias_carga = advertencias
                 
                 # Las restricciones se mantienen como predeterminadas
                 print(f"Datos cargados desde formato antiguo {archivo_antiguo}")

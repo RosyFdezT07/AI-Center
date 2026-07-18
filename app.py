@@ -200,6 +200,10 @@ def initialize_planificador():
             # Intentar cargar datos existentes
             datos_cargados = st.session_state.planificador.cargar_datos()
             
+            # Advertencias al usuario
+            for advertencia in st.session_state.planificador.advertencias_carga:
+                st.warning(f"⚠️ {advertencia}")
+            
             # Si no se cargaron datos, cargar recursos predeterminados
             if not datos_cargados:
                 recursos_predeterminados = crear_recursos_predeterminados()

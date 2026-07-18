@@ -1,116 +1,17 @@
 {
   "metadata": {
-    "fecha_guardado": "2026-06-24T21:09:15.525875",
+    "fecha_guardado": "2026-07-17T22:33:30.764793",
     "version": "1.0",
-    "total_eventos": 5,
-    "total_recursos": 14,
+    "total_eventos": 1,
+    "total_rec__init__.py app.py main.py README.md report.md requirements.txtursos": 14,
     "total_restricciones": 10
   },
   "eventos": [
     {
-      "id": "evento_46eb2f08",
-      "nombre": "Análisis de datos médicos",
-      "inicio": "2026-06-24T12:00:00",
-      "fin": "2026-06-24T12:30:00",
-      "recursos": [
-        {
-          "id": "cientifico_datos",
-          "nombre": "Científico de Datos",
-          "tipo": "humano",
-          "capacidad": 3,
-          "atributos": {
-            "especialidad": "Data Science",
-            "experiencia": "2+ años",
-            "certificaciones": [
-              "Python",
-              "Pandas",
-              "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "lab_datos_sensibles",
-          "nombre": "Laboratorio de Datos Sensibles",
-          "tipo": "espacio",
-          "capacidad": 1,
-          "atributos": {
-            "capacidad_personas": 4,
-            "seguridad": "Nivel 3",
-            "equipamiento": [
-              "Estaciones seguras",
-              "Almacenamiento encriptado"
-            ]
-          }
-        }
-      ],
-      "tipo": "investigación",
-      "descripcion": "",
-      "estado": "completado",
-      "prioridad": 5,
-      "metadata": {}
-    },
-    {
-      "id": "evento_736c15d4",
-      "nombre": "Discusión sobre resultados médicos",
-      "inicio": "2026-06-24T11:00:00",
-      "fin": "2026-06-24T11:15:00",
-      "recursos": [
-        {
-          "id": "cientifico_datos",
-          "nombre": "Científico de Datos",
-          "tipo": "humano",
-          "capacidad": 3,
-          "atributos": {
-            "especialidad": "Data Science",
-            "experiencia": "2+ años",
-            "certificaciones": [
-              "Python",
-              "Pandas",
-              "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "cientifico_datos",
-          "nombre": "Científico de Datos",
-          "tipo": "humano",
-          "capacidad": 3,
-          "atributos": {
-            "especialidad": "Data Science",
-            "experiencia": "2+ años",
-            "certificaciones": [
-              "Python",
-              "Pandas",
-              "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "lab_datos_sensibles",
-          "nombre": "Laboratorio de Datos Sensibles",
-          "tipo": "espacio",
-          "capacidad": 1,
-          "atributos": {
-            "capacidad_personas": 4,
-            "seguridad": "Nivel 3",
-            "equipamiento": [
-              "Estaciones seguras",
-              "Almacenamiento encriptado"
-            ]
-          }
-        }
-      ],
-      "tipo": "seminario",
-      "descripcion": "",
-      "estado": "completado",
-      "prioridad": 5,
-      "metadata": {}
-    },
-    {
-      "id": "evento_9fca3d7b",
+      "id": "evento_27adc19a",
       "nombre": "Entrenamiento de modelos",
-      "inicio": "2026-06-24T12:30:00",
-      "fin": "2026-06-24T13:00:00",
+      "inicio": "2026-07-17T22:14:00",
+      "fin": "2026-07-17T22:29:00",
       "recursos": [
         {
           "id": "cientifico_datos",
@@ -124,105 +25,6 @@
               "Python",
               "Pandas",
               "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "lab_datos_sensibles",
-          "nombre": "Laboratorio de Datos Sensibles",
-          "tipo": "espacio",
-          "capacidad": 1,
-          "atributos": {
-            "capacidad_personas": 4,
-            "seguridad": "Nivel 3",
-            "equipamiento": [
-              "Estaciones seguras",
-              "Almacenamiento encriptado"
-            ]
-          }
-        }
-      ],
-      "tipo": "entrenamiento",
-      "descripcion": "",
-      "estado": "completado",
-      "prioridad": 4,
-      "metadata": {}
-    },
-    {
-      "id": "evento_eb82b0fa",
-      "nombre": "Machine Learning",
-      "inicio": "2026-06-24T11:30:00",
-      "fin": "2026-06-24T12:00:00",
-      "recursos": [
-        {
-          "id": "cientifico_datos",
-          "nombre": "Científico de Datos",
-          "tipo": "humano",
-          "capacidad": 3,
-          "atributos": {
-            "especialidad": "Data Science",
-            "experiencia": "2+ años",
-            "certificaciones": [
-              "Python",
-              "Pandas",
-              "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "cientifico_datos",
-          "nombre": "Científico de Datos",
-          "tipo": "humano",
-          "capacidad": 3,
-          "atributos": {
-            "especialidad": "Data Science",
-            "experiencia": "2+ años",
-            "certificaciones": [
-              "Python",
-              "Pandas",
-              "Scikit-learn"
-            ]
-          }
-        },
-        {
-          "id": "lab_datos_sensibles",
-          "nombre": "Laboratorio de Datos Sensibles",
-          "tipo": "espacio",
-          "capacidad": 1,
-          "atributos": {
-            "capacidad_personas": 4,
-            "seguridad": "Nivel 3",
-            "equipamiento": [
-              "Estaciones seguras",
-              "Almacenamiento encriptado"
-            ]
-          }
-        }
-      ],
-      "tipo": "investigación",
-      "descripcion": "",
-      "estado": "completado",
-      "prioridad": 5,
-      "metadata": {}
-    },
-    {
-      "id": "evento_efee8e40",
-      "nombre": "Machine Learning",
-      "inicio": "2026-06-24T21:05:00",
-      "fin": "2026-06-24T21:20:00",
-      "recursos": [
-        {
-          "id": "investigador_vision",
-          "nombre": "Investigador Senior - Visión Computacional",
-          "tipo": "humano",
-          "capacidad": 1,
-          "atributos": {
-            "especialidad": "Computer Vision",
-            "experiencia": "5+ años",
-            "certificaciones": [
-              "PyTorch",
-              "OpenCV",
-              "TensorFlow"
             ]
           }
         },
@@ -242,7 +44,7 @@
       ],
       "tipo": "entrenamiento",
       "descripcion": "",
-      "estado": "en_curso",
+      "estado": "completado",
       "prioridad": 3,
       "metadata": {}
     }

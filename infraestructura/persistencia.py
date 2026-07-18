@@ -49,7 +49,7 @@ class Persistencia:
     def cargar_sistema(archivo: str = "datos.json") -> tuple:
         """Permite cargar los datos del sistema"""
         """
-        Returns: tuple: (gestor_eventos, gestor_recursos, restricciones)
+        Returns: tuple: (gestor_eventos, gestor_recursos, restricciones, advertencias)
         Raises:
         FileNotFoundError: "El archivo no fue encontrado"
         json.JSONDecodeError: "Si el archivo no es JSON válido"
@@ -60,6 +60,7 @@ class Persistencia:
 
         #cargar recursos
         gestor_recursos = GestorRecursos()
+        advertencias = []
         for recurso_data in datos.get("recursos", []):
             recurso_id = recurso_data.get('id')
             recurso_existente = gestor_recursos.obtener_recurso(recurso_id)
@@ -89,7 +90,10 @@ class Persistencia:
                         print(
                             f"El recurso con ID '{recurso_id}' referenciado en evento '{evento_data.get('id', 'sin id')}', "
                             "no es encontrado en el gestor de recursos.Omitiendo recurso"
-                        )   
+                        )
+                        advertencias.append(
+                            f"El recurso con ID '{recurso_id}' referenciado en evento '{evento_data.get('id', 'sin id')}', "
+                            "no es encontrado en el gestor de recursos.Omitiendo recurso")   
                         continue
                     recursos_evento.append(recurso)
                 else:
@@ -103,11 +107,11 @@ class Persistencia:
             #Para crear el objeto evento 
             evento = Evento.from_dict(evento_data)
             gestor_eventos.agregar_evento(evento)
-
+        
         #cargar restricciones
         restricciones = Persistencia.deserializar_restricciones(datos.get("restricciones", []))
         
-        return gestor_eventos, gestor_recursos, restricciones
+        return gestor_eventos, gestor_recursos, restricciones, advertencias
     
     @staticmethod
     def serializar_restricciones(restricciones: List[Restriccion]) -> List[Dict[str, Any]]:

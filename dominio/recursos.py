@@ -47,13 +47,6 @@ class Recurso:
             'atributos': self.atributos,
         } 
     
-    def es_compatible_con(self, other: 'Recurso') ->bool:
-        """Verifica si este recurso es compatible con otro para restricciones"""
-        # Lógica básica de compatibilidad (puede extenderse)
-        if self.tipo == "computacional" and other.tipo == "humano":
-            return True
-        return False  
-    
     def __hash__(self):
         """Permite utilizar Recurso en conjuntos y como clave de diccionarios"""
         return hash(self.id)

@@ -286,6 +286,8 @@ class GestorEventos:
         a partir de un diccionario de recursos
         """
         
+        advertencias = []
+        
         for evento_data in lista_eventos:
             # Saltar si no hay recursos definidos 
             if 'recursos' not in evento_data:
@@ -316,6 +318,7 @@ class GestorEventos:
                 elif recurso_id:
                     # Lanzar una advertencia
                     print (f" Recurso no encontrado: {recurso_id}")
+                    advertencias.append(f"Recurso no encontrado: {recurso_id}")
                     
             # Actualizar el evento con los recursos reconstruidos 
             evento_data_actualizado = evento_data.copy()
@@ -328,6 +331,8 @@ class GestorEventos:
                         
             except Exception as e:
                 print (f" Error al cargar evento {e}")
+        
+        return advertencias 
                         
                 
     def to_list(self) -> List[Dict[str, Any]]:
