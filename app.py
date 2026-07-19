@@ -376,7 +376,7 @@ def display_recurso_card(recurso):
                     {badge_for_recurso(recurso)}
                 </p>
             </div>
-            <div>
+            <div>❌
                 <span style="color: #00D4FF; font-weight: bold;">Capacidad: {recurso.capacidad}</span>
             </div>
         </div>
@@ -708,7 +708,7 @@ def show_dashboard(planificador):
         <div class="stMetric">
             <div style="font-size: 32px; color: #00D4FF;">🧑‍🔬</div>
             <div style="font-size: 14px;">Recursos Humanos</div>
-            <div style="font-size: 24px; font-weight: bold; color: white;">""" + 
+            <div style="font-size: 24px; fo❌nt-weight: bold; color: white;">""" + 
             str(len([r for r in planificador.listar_recursos() if r.tipo == 'humano'])) + 
             """</div>
         </div>
@@ -1258,7 +1258,7 @@ def show_nuevo_evento(planificador):
             **Fecha:** {fecha_inicio}
             **Inicio:** {hora_inicio}
             **Fin:** {fin_str}
-            **Duración:**__init__.py app.py main.py README.md report.md requirements.txt {duracion_str}
+            **Duración:** {duracion_str}
             **Estado inicial:** {estado_automatico.upper()}
             """)
         
@@ -1533,6 +1533,7 @@ def show_datos(planificador):
                 with st.spinner("Cargando..."):
                     if planificador.cargar_datos(archivo_cargar):
                         st.success("✅ Datos cargados exitosamente")
+                        st.rerun()
                     else:
                         st.error("❌ Error al cargar datos")
         
@@ -1541,17 +1542,96 @@ def show_datos(planificador):
         # Backup
         st.subheader("🔄 Sistema de Backup")
         
-        if st.button("🛡️ Crear Backup Automático", use_container_width=True):
+        col_backup1, col_backup2 = st.columns(2)
+        
+        with col_backup1:
+            st.markdown("#### 🛡️ Crear Backup")
+            if st.button("🛡️ Crear Backup Automático", use_container_width=True):
+                from infraestructura.persistencia import Persistencia
+                try:
+                    archivo_backup = Persistencia.crear_backup(
+                        planificador.gestor_recursos,
+                        planificador.gestor_eventos,
+                        planificador.restricciones
+                    )
+                    st.success(f"✅ Backup creado: {os.path.basename(archivo_backup)}")
+                except Exception as e:
+                    st.error(f"❌ Error al crear backup: {e}")
+                    
+        with col_backup2:
+            st.markdown("#### ♻️ Restaurar Backup")
+            
+            if st.session_state.get("restore_exitoso"):
+                st.success(f"✅ Datos restaurados desde {st.session_state.restore_exitoso}")
+                st.session_state.restore_exitoso = None
+        
+            if st.session_state.get("restore_error_guardado"):
+                st.error("❌ El backup se restauró en memoria, pero no se pudo guardar en datos.json")
+                st.session_state.restore_error_guardado = None
+            
             from infraestructura.persistencia import Persistencia
-            try:
-                archivo_backup = Persistencia.crear_backup(
-                    planificador.gestor_recursos,
-                    planificador.gestor_eventos,
-                    planificador.restricciones
+            
+            backups_disponibles = Persistencia.listar_backups()
+            
+            if not backups_disponibles:
+                st.info("No hay backups disponibles todavía")
+                
+            elif st.session_state.get("backup_pendiente") is None:
+                max_backups_mostrados = 10
+                backups_mostrados = backups_disponibles[:max_backups_mostrados]
+                
+                opciones = {
+                    f"{b['nombre']}({b['tamaño'] / 1024:.1f} KB)": b
+                    for b in backups_mostrados
+                }
+                
+                backup_elegido = st.selectbox("Selecciona un backup", list(opciones.keys()))
+                
+                if len(backups_disponibles) > max_backups_mostrados:
+                    st.caption(
+                        f"Mostrando los {max_backups_mostrados} más recientes "
+                        f"de {len(backups_disponibles)} backups totales."
+                    )
+                    
+                if st.button("♻️ Restaurar Backup", use_container_width=True, key="btn_solicitar_restore"):
+                    st.session_state.backup_pendiente = opciones[backup_elegido]["ruta"]
+                    st.session_state.backup_pendiente_nombre = backup_elegido
+                    st.rerun()
+                    
+            else: 
+                st.warning(
+                    f"¿Sobrescribir los datos actuales con "
+                    f"**{st.session_state.backup_pendiente_nombre}**?"
                 )
-                st.success(f"✅ Backup creado: {os.path.basename(archivo_backup)}")
-            except Exception as e:
-                st.error(f"❌ Error al crear backup: {e}")
+                
+                if st.button("✅ Sí, restaurar", use_container_width=True,
+                             type="primary", key="btn_confirmar_restore"):
+                    try:
+                        gestor_eventos, gestor_recursos, restricciones, advertencias = Persistencia.cargar_backup(
+                            st.session_state.backup_pendiente
+                        )
+                        planificador.gestor_eventos = gestor_eventos
+                        planificador.gestor_recursos = gestor_recursos
+                        planificador.restricciones = restricciones
+                        planificador.advertencias_carga = advertencias
+                        
+                        for advertencia in advertencias:
+                            st.warning(f"⚠️ {advertencia}")
+                            
+                        if planificador.guardar_datos():
+                            st.session_state.restore_exitoso = st.session_state.backup_pendiente_nombre
+                        else:
+                            st.session_state.restore_error_guardado = True    
+                        
+                        st.rerun()
+                    except Exception as e:
+                        st.error(f"❌ Error al restaurar backup: {e}")
+                    finally:
+                        st.session_state.backup_pendiente = None
+                        
+                if st.button("❌ Cancelar", use_container_width=True, key="btn_cancelar_restore"):
+                    st.session_state.backup_pendiente = None
+                    st.rerun()
     
     # Pestaña 2 
     with tab2:

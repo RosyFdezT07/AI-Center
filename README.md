@@ -455,9 +455,6 @@ Implementado en: Recurso.capacidad y algoritmo de verificación en planificador.
 
  Sistema de backup con timestamp (creación manual desde la interfaz)
 
-
-Este sistema está listo para ser desplegado en cualquier centro de investigación que necesite gestionar recursos valiosos y especializados de manera inteligente y eficiente.
-
 Desarrollado para el curso de Ciencias de la Computación 1er año
 Centro de Investigación en IA - Planificador Inteligente de Eventos
 📅 Enero 2026 • 🐍 Python 3.9+ • 🎨 Streamlit
