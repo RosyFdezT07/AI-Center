@@ -1,18 +1,33 @@
 {
   "metadata": {
-    "fecha_guardado": "2026-07-17T22:33:30.764793",
+    "fecha_guardado": "2026-07-19T13:14:32.751927",
     "version": "1.0",
-    "total_eventos": 1,
-    "total_rec__init__.py app.py main.py README.md report.md requirements.txtursos": 14,
+    "total_eventos": 2,
+    "total_recursos": 14,
     "total_restricciones": 10
   },
   "eventos": [
     {
-      "id": "evento_27adc19a",
-      "nombre": "Entrenamiento de modelos",
-      "inicio": "2026-07-17T22:14:00",
-      "fin": "2026-07-17T22:29:00",
+      "id": "evento_35424335",
+      "nombre": "Entrenamiento Modelo CNN",
+      "inicio": "2026-07-18T23:18:00",
+      "fin": "2026-07-18T23:33:00",
       "recursos": [
+        {
+          "id": "investigador_vision",
+          "nombre": "Investigador Senior - Visión Computacional",
+          "tipo": "humano",
+          "capacidad": 1,
+          "atributos": {
+            "especialidad": "Computer Vision",
+            "experiencia": "5+ años",
+            "certificaciones": [
+              "PyTorch",
+              "OpenCV",
+              "TensorFlow"
+            ]
+          }
+        },
         {
           "id": "cientifico_datos",
           "nombre": "Científico de Datos",
@@ -40,11 +55,99 @@
             "almacenamiento": "50TB NVMe",
             "consumo_energia": "6.5kW"
           }
+        },
+        {
+          "id": "lab_datos_sensibles",
+          "nombre": "Laboratorio de Datos Sensibles",
+          "tipo": "espacio",
+          "capacidad": 1,
+          "atributos": {
+            "capacidad_personas": 4,
+            "seguridad": "Nivel 3",
+            "equipamiento": [
+              "Estaciones seguras",
+              "Almacenamiento encriptado"
+            ]
+          }
         }
       ],
       "tipo": "entrenamiento",
       "descripcion": "",
       "estado": "completado",
+      "prioridad": 3,
+      "metadata": {}
+    },
+    {
+      "id": "evento_1197cb64",
+      "nombre": "Machine Learning",
+      "inicio": "2026-07-19T13:08:00",
+      "fin": "2026-07-19T13:23:00",
+      "recursos": [
+        {
+          "id": "cientifico_datos",
+          "nombre": "Científico de Datos",
+          "tipo": "humano",
+          "capacidad": 3,
+          "atributos": {
+            "especialidad": "Data Science",
+            "experiencia": "2+ años",
+            "certificaciones": [
+              "Python",
+              "Pandas",
+              "Scikit-learn"
+            ]
+          }
+        },
+        {
+          "id": "cientifico_datos",
+          "nombre": "Científico de Datos",
+          "tipo": "humano",
+          "capacidad": 3,
+          "atributos": {
+            "especialidad": "Data Science",
+            "experiencia": "2+ años",
+            "certificaciones": [
+              "Python",
+              "Pandas",
+              "Scikit-learn"
+            ]
+          }
+        },
+        {
+          "id": "robot_aprendizaje",
+          "nombre": "Robot de Aprendizaje por Refuerzo",
+          "tipo": "computacional",
+          "capacidad": 1,
+          "atributos": {
+            "tipo": "Manipulador 6DOF",
+            "sensores": [
+              "RGB-D",
+              "LiDAR",
+              "Táctiles"
+            ],
+            "controlador": "NVIDIA Jetson AGX",
+            "software": "ROS2, PyTorch",
+            "area_requerida": "16m²"
+          }
+        },
+        {
+          "id": "lab_datos_sensibles",
+          "nombre": "Laboratorio de Datos Sensibles",
+          "tipo": "espacio",
+          "capacidad": 1,
+          "atributos": {
+            "capacidad_personas": 4,
+            "seguridad": "Nivel 3",
+            "equipamiento": [
+              "Estaciones seguras",
+              "Almacenamiento encriptado"
+            ]
+          }
+        }
+      ],
+      "tipo": "entrenamiento",
+      "descripcion": "",
+      "estado": "en_curso",
       "prioridad": 3,
       "metadata": {}
     }
